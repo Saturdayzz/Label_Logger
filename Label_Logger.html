@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Label Logger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button#button4 {
+            background-color: #28a745;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button#button4:hover {
+            background-color: #218838;
+        }
+
+        #exportButton {
+            background-color: #6c757d;
+        }
+
+        #exportButton:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <h1>Label Logger</h1>
+    <label for="nameInput">Name:</label>
+    <input type="text" id="nameInput">
+    <br><br>
+    <button id="button1">Indoor</button>
+    <button id="button2">Outdoor</button>
+    <button id="button3">Semi-Indoor</button>
+    <button id="button4">Not sure</button>
+    <button id="exportButton">Export Logs</button>
+
+    <script>
+        var buttonLogs = [];
+        var recordName;
+
+        function getCurrentTime() {
+            var now = new Date();
+            return now.toLocaleString();
+        }
+
+        function logButtonClick(buttonId, note) {
+            var time = getCurrentTime();
+            buttonLogs.push({ buttonId: buttonId, time: time, name: recordName, note: note });
+        }
+
+        document.getElementById("button1").addEventListener("click", function() {
+            logButtonClick(1, "");
+        });
+
+        document.getElementById("button2").addEventListener("click", function() {
+            logButtonClick(2, "");
+        });
+
+        document.getElementById("button3").addEventListener("click", function() {
+            logButtonClick(3, "");
+        });
+
+        document.getElementById("button4").addEventListener("click", function() {
+            var note = prompt("Please enter your note:");
+            logButtonClick(4, note ? note : "No note");
+        });
+
+        document.getElementById("exportButton").addEventListener("click", function() {
+            if (!recordName) {
+                alert("Please enter your name before exporting!");
+                return;
+            }
+            exportLogs();
+        });
+
+        function exportLogs() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Name,ButtonId,Time,Note\n"; // Add header row
+            buttonLogs.forEach(function(log) {
+                csvContent += log.name + "," + log.buttonId + "," + log.time + "," + log.note + "\n";
+            });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "button_logs.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        document.getElementById("nameInput").addEventListener("change", function() {
+            recordName = this.value;
+        });
+    </script>
+</body>
+</html>
