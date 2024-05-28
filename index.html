@@ -213,7 +213,6 @@
     <div id="page2" class="content">
         <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
         <button id="addRecordButton" onclick="addRecord()">Add record</button>
-        <button id="clearCookies" onclick="clearCookies()">Clear cookies</button>
         <div id="logTable"></div>
     </div>
 
@@ -223,30 +222,29 @@
     </div>
 
     <script>
+        var buttonLogs = [];
         var recordName;
         var selectedButton = null;
         var statusDisplay = document.getElementById("statusDisplay");
         var timeDisplay = document.getElementById("timeDisplay");
         var statusImage = document.getElementById("statusImage");
+        var buttonLogs = [
+        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }
+        ];
         var buttonLabels = {
             "1": "indoor",
             "2": "outdoor",
             "3": "semi-indoor",
             "4": "not sure"
         };
-        var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
-        var cookieValue = cookie ? cookie.pop() : null;
-        var buttonLogs = `Cookie: ${cookieValue || [
-        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }] }`;
 
-        function saveCookies() {
+        function saveToLocalStorage() {
             var value = buttonLogs;
-            var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 72).toUTCString(); // Set expiration time to 72 hours from now
-            document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
+            window.localStorage.setItem("loglocal", value);
         }
 
-        function clearCookies() {
-            gonative.webview.clearCookies();
+        function clearCache() {
+            gonative.webview.clearCache();
             renderLogs();
         }
 
@@ -262,6 +260,7 @@
         }
 
         function renderLogs() {
+            //saveToLocalStorage();
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
@@ -269,7 +268,6 @@
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
-            saveCookies();
         }
 
         function addRecord() {
@@ -280,7 +278,7 @@
                 name = recordName;
             }
 
-            var buttonId = prompt("Please select environment number (1: Indoor, 2: Outdoor, 3: Semi-indoor, 4: Not sure):");
+            var buttonId = prompt("Please select environment number. \n1: Indoor, \n2: Outdoor, \n3: Semi-indoor, \n4: Not sure.");
             if (!buttonLabels[buttonId]) {
                 alert("Invalid");
                 return;
