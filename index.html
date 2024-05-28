@@ -223,21 +223,21 @@
     </div>
 
     <script>
-        var buttonLogs = [];
         var recordName;
         var selectedButton = null;
         var statusDisplay = document.getElementById("statusDisplay");
         var timeDisplay = document.getElementById("timeDisplay");
         var statusImage = document.getElementById("statusImage");
-        var buttonLogs = [
-        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }
-        ];
         var buttonLabels = {
             "1": "indoor",
             "2": "outdoor",
             "3": "semi-indoor",
             "4": "not sure"
         };
+        var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
+        var cookieValue = cookie ? cookie.pop() : null;
+        var buttonLogs = `Cookie: ${cookieValue || [
+        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }] }`;
 
         function saveCookies() {
             var value = buttonLogs;
