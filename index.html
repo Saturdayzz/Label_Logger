@@ -314,10 +314,8 @@
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "button_logs.csv");
-            document.body.appendChild(link);
-            link.click();
             median.share.downloadFile({url: link, open: true})
-            
+          
         }
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
