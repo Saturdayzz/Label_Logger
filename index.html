@@ -184,6 +184,11 @@
             background-color: #ffffcc; 
             color: #000; 
         }
+        h1 .icon {
+            margin-left: 5px;
+            width: 40px;
+            height: 40px;
+        }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
@@ -206,8 +211,9 @@
     </div>
 
     <div id="page2" class="content">
-        <h1>Log Table</h1>
+        <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
         <button id="addRecordButton" onclick="addRecord()">Add record</button>
+        <button id="clearCookies" onclick="clearCookies()">Clear cookies</button>
         <div id="logTable"></div>
     </div>
 
@@ -233,6 +239,18 @@
             "4": "not sure"
         };
 
+        function saveCookies() {
+            var value = buttonLogs;
+            window.localStorage.setItem("loglocal", value);
+            var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 72).toUTCString(); // Set expiration time to 72 hours from now
+            document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
+        }
+
+        function clearCookies() {
+            gonative.webview.clearCookies();
+            renderLogs();
+        }
+
         function showPage(pageId) {
             var pages = document.querySelectorAll('.content');
             pages.forEach(function(page) {
@@ -245,6 +263,7 @@
         }
 
         function renderLogs() {
+            saveCookies();
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
@@ -319,8 +338,6 @@
 
             const blobUrl = createCsvBlob();
             gonative.share.downloadFile({url: blobUrl});
-
-          
         }
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
