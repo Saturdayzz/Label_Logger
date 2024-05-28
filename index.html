@@ -4,38 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Label Logger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 0;
             padding: 20px;
         }
 
         h1 {
-            color: #333;
+            color: #000000;
             text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
+            font-size: 45px;
         }
 
         label {
             font-weight: bold;
-            color: #666;
+            color: #000000;
         }
 
         input[type="text"] {
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 3px;
+            width: calc(100% - 12px); /* Ensure the input takes the full width minus padding */
+            box-sizing: border-box;
         }
 
         button {
-            padding: 8px 16px;
-            margin-right: 10px;
+            padding: 12px;
+            margin: 10px 0;
             border: none;
             border-radius: 5px;
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
+            width: 100%;
+            box-sizing: border-box; 
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button .icon {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
         }
 
         button#button4 {
@@ -57,59 +75,104 @@
         #exportButton:hover {
             background-color: #5a6268;
         }
+
+        #cancelButton {
+            background-color: #dc3545;
+        }
+
+        #cancelButton:hover {
+            background-color: #c82333;
+        }
+
+        .inactive {
+            background-color: #d3d3d3 !important;
+            color: #000 !important;
+            cursor: not-allowed;
+        }
+
+        #statusDisplay {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #000000;
+        }
+
+        #timeDisplay {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #currentTimeLabel {
+            color: #000000; /* 当前时间标签的颜色 */
+        }
+        #currentTime {
+            color: #666; /* 当前时间的颜色 */
+        }
+
+        #currentStatusLabel {
+            color: #000000; /* 当前时间标签的颜色 */
+        }
+        #currentStatus {
+            color: #666; /* 当前时间标签的颜色 */
+        }
+
+        #statusImage {
+            margin-top: 20px;
+            width: 200px;
+            height: 200px;
+            display: none;
+            margin: 0 auto;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
 </head>
 <body>
     <h1>Label Logger</h1>
     <label for="nameInput">Name:</label>
     <input type="text" id="nameInput">
     <br><br>
-    <button id="button1">Indoor</button>
-    <button id="button2">Outdoor</button>
-    <button id="button3">Semi-Indoor</button>
-    <button id="button4">Not sure</button>
-    <button id="exportButton">Export Logs</button>
+    <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
+    <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
+    <img id="statusImage" src="" alt="Status Image">
+    <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
+    <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
+    <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
+    <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
+    <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
+    <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button>
 
     <script>
         var buttonLogs = [];
         var recordName;
+        var selectedButton = null;
+        var statusDisplay = document.getElementById("statusDisplay");
+        var timeDisplay = document.getElementById("timeDisplay");
+        var statusImage = document.getElementById("statusImage");
 
         function getCurrentTime() {
             var now = new Date();
-            return now.toLocaleString();
+            var options = { timeZoneName: 'short' };
+            return now.toLocaleString(undefined, options);
         }
+
+        function updateTime() {
+            var now = new Date();
+            var options = { timeZoneName: 'short' };
+            var timeString = now.toLocaleTimeString(undefined, options);
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        setInterval(updateTime, 1000);
 
         function logButtonClick(buttonId, note) {
             var time = getCurrentTime();
             buttonLogs.push({ buttonId: buttonId, time: time, name: recordName, note: note });
         }
 
-        document.getElementById("button1").addEventListener("click", function() {
-            logButtonClick(1, "");
-        });
-
-        document.getElementById("button2").addEventListener("click", function() {
-            logButtonClick(2, "");
-        });
-
-        document.getElementById("button3").addEventListener("click", function() {
-            logButtonClick(3, "");
-        });
-
-        document.getElementById("button4").addEventListener("click", function() {
-            var note = prompt("Please enter your note:");
-            logButtonClick(4, note ? note : "No note");
-        });
-
-        document.getElementById("exportButton").addEventListener("click", function() {
+        function exportLogs() {
             if (!recordName) {
                 alert("Please enter your name before exporting!");
                 return;
             }
-            exportLogs();
-        });
-
-        function exportLogs() {
             var csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Name,ButtonId,Time,Note\n"; // Add header row
             buttonLogs.forEach(function(log) {
@@ -120,12 +183,144 @@
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "button_logs.csv");
             document.body.appendChild(link);
-            link.click();
+            const newWindow = window.open(encodedUri, '_blank');
+            if (newWindow) {
+                newWindow.focus();
+            } else {
+                alert("Please allow popups for this website to download the file.");
+            }
         }
+
+        function handleButtonClick(buttonId, buttonLabel, imageName) {
+            if (!recordName) {
+                alert("Please enter your name before logging!");
+                return;
+            }
+
+            if (selectedButton === buttonId) {
+                if (buttonId === 4 || confirm("Do you want to cancel the current status?")) {
+                    logButtonClick(buttonId, "No status");
+                    selectedButton = null;
+                    currentStatus.textContent= "None";
+                    statusImage.style.display = "none";
+                    resetButtonStates();
+                }
+                return;
+            }
+
+            if (selectedButton === null){
+                if (buttonId == 1){
+                    if (!confirm("Do you want to select the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    return;
+                }}
+                else if (buttonId === 2){
+                    if (!confirm("Do you want to select the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    return;
+                }}
+                else if (buttonId === 3){
+                    if (!confirm("Do you want to select the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    return;
+                }}
+                else if (buttonId === 4){
+                    if (!confirm("Do you want to select the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    return;
+                }}
+            }
+
+            if (selectedButton !== null) {
+                if (buttonId == 1){
+                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    return;
+                }}
+                else if (buttonId === 2){
+                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    return;
+                }}
+                else if (buttonId === 3){
+                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    return;
+                }}
+                else if (buttonId === 4){
+                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    return;
+                }}
+            }
+
+            if (buttonId === 4) {
+                if (confirm("Are you sure you want to select this option?")) {
+                    var note = prompt("Please enter your note:") || "No note";
+                    selectedButton = buttonId;
+                    logButtonClick(buttonId, note);
+                    updateButtonStates();
+                    currentStatus.textContent = "You are " + buttonLabel + "!";
+                    statusImage.src = imageName;
+                    statusImage.style.display = "block";
+                }
+            } else {
+                selectedButton = buttonId;
+                logButtonClick(buttonId, "");
+                updateButtonStates();
+                currentStatus.textContent = "You are " + buttonLabel + "!";
+                statusImage.src = imageName;
+                statusImage.style.display = "block";
+            }
+        }
+
+        function updateButtonStates() {
+            var buttons = document.querySelectorAll('button[id^="button"]');
+            buttons.forEach(function(button) {
+                if (parseInt(button.id.replace('button', '')) === selectedButton) {
+                    button.classList.remove('inactive');
+                } else {
+                    button.classList.add('inactive');
+                }
+            });
+        }
+
+        function resetButtonStates() {
+            var buttons = document.querySelectorAll('button[id^="button"]');
+            buttons.forEach(function(button) {
+                button.classList.remove('inactive');
+            });
+        }
+
+        window.onload = function() {
+            alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+        };
+
+        document.getElementById("button1").addEventListener("click", function() {
+            handleButtonClick(1, "Indoor", "images/indoor.png");
+        });
+
+        document.getElementById("button2").addEventListener("click", function() {
+            handleButtonClick(2, "Outdoor", "images/outdoor.png");
+        });
+
+        document.getElementById("button3").addEventListener("click", function() {
+            handleButtonClick(3, "Semi-Indoor", "images/semi_indoor.png");
+        });
+
+        document.getElementById("button4").addEventListener("click", function() {
+            handleButtonClick(4, "Not sure", "images/not_sure.png");
+        });
+
+        document.getElementById("exportButton").addEventListener("click", function() {
+            exportLogs();
+        });
+
+        document.getElementById("cancelButton").addEventListener("click", function() {
+            logButtonClick(selectedButton, "No status");
+            selectedButton = null;
+            currentStatus.textContent = "None";
+            statusImage.style.display = "none";
+            resetButtonStates();
+        });
 
         document.getElementById("nameInput").addEventListener("change", function() {
             recordName = this.value;
         });
+
+        updateTime(); // Initial call to set time immediately
     </script>
 </body>
 </html>
