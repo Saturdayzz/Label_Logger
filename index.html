@@ -13,6 +13,15 @@
             padding: 20px;
         }
 
+        .content {
+            flex: 1;
+            display: none;
+            padding: 20px;
+        }
+        .content.active {
+            display: block;
+        }
+
         h1 {
             color: #000000;
             text-align: center;
@@ -68,6 +77,10 @@
             background-color: #218838;
         }
 
+        button#addRecordButton {
+            background-color: #dc3545;
+        }
+
         #exportButton {
             background-color: #6c757d;
         }
@@ -102,17 +115,17 @@
         }
 
         #currentTimeLabel {
-            color: #000000; /* 当前时间标签的颜色 */
+            color: #000000; 
         }
         #currentTime {
-            color: #666; /* 当前时间的颜色 */
+            color: #666;
         }
 
         #currentStatusLabel {
-            color: #000000; /* 当前时间标签的颜色 */
+            color: #000000; 
         }
         #currentStatus {
-            color: #666; /* 当前时间标签的颜色 */
+            color: #666;
         }
 
         #statusImage {
@@ -122,23 +135,86 @@
             display: none;
             margin: 0 auto;
         }
+
+        .navbar button {
+            padding: 0; 
+            margin: 0;
+            border: none;
+            border-radius: 5px;
+            background: none; 
+            color: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .navbar button:hover {
+            background-color: #ffffff; 
+            color: #000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000; 
+            color: #fff; 
+            height: 35px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .example-row {
+            background-color: #ffffcc; 
+            color: #000; 
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Label Logger</h1>
-    <label for="nameInput">Name:</label>
-    <input type="text" id="nameInput">
-    <br><br>
-    <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
-    <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
-    <img id="statusImage" src="" alt="Status Image">
-    <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
-    <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
-    <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
-    <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
-    <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
-    <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button>
+    <div id="page1" class="content active">
+        <h1>Label Logger</h1>
+        <label for="nameInput">Name:</label>
+        <input type="text" id="nameInput">
+        <br><br>
+        <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
+        <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
+        <img id="statusImage" src="" alt="Status Image">
+        <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
+        <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
+        <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
+        <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
+        <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
+        <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button>
+    </div>
+
+    <div id="page2" class="content">
+        <h1>Log Table</h1>
+        <button id="addRecordButton" onclick="addRecord()">Add record</button>
+        <div id="logTable"></div>
+    </div>
+
+    <div class="navbar">
+        <button onclick="showPage('page1')">Home</button>
+        <button onclick="showPage('page2')">Log Page</button>
+    </div>
 
     <script>
         var buttonLogs = [];
@@ -147,6 +223,61 @@
         var statusDisplay = document.getElementById("statusDisplay");
         var timeDisplay = document.getElementById("timeDisplay");
         var statusImage = document.getElementById("statusImage");
+        var buttonLogs = [
+        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }
+        ];
+        var buttonLabels = {
+            "1": "indoor",
+            "2": "outdoor",
+            "3": "semi-indoor",
+            "4": "not sure"
+        };
+
+        function showPage(pageId) {
+            var pages = document.querySelectorAll('.content');
+            pages.forEach(function(page) {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'page2') {
+                renderLogs();
+            }
+        }
+
+        function renderLogs() {
+            var tableContent = "<table><tr><th>Name</th><th>ButtonId</th><th>ButtonLabel</th><th>Time</th><th>Note</th></tr>";
+            buttonLogs.forEach(function(log, index) {
+                var rowClass = index === 0 ? "class='example-row'" : "";
+                tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+            });
+            tableContent += "</table>";
+            document.getElementById('logTable').innerHTML = tableContent;
+        }
+
+        function addRecord() {
+            if(!recordName){
+                var name = prompt("Please input your name:");
+                if (!name) return;
+            }else{
+                name = recordName;
+            }
+
+            var buttonId = prompt("Please select environment number (1: Indoor, 2: Outdoor, 3: Semi-indoor, 4: Not sure):");
+            if (!buttonLabels[buttonId]) {
+                alert("Invalid");
+                return;
+            }
+
+            var start_time = prompt("Please input start time:");
+            var end_time = prompt("Please input end time:");
+            var note = prompt("Your note:");
+            var buttonLabel = buttonLabels[buttonId];
+
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: start_time, note: note });
+            renderLogs();
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: end_time, note: 'Stop' });
+            renderLogs();
+        }
 
         function getCurrentTime() {
             var now = new Date();
@@ -165,7 +296,8 @@
 
         function logButtonClick(buttonId, note) {
             var time = getCurrentTime();
-            buttonLogs.push({ buttonId: buttonId, time: time, name: recordName, note: note });
+            var buttonLabel = buttonLabels[buttonId] || "unknown";
+            buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, time: time, name: recordName, note: note });
         }
 
         function exportLogs() {
@@ -198,8 +330,8 @@
             }
 
             if (selectedButton === buttonId) {
-                if (buttonId === 4 || confirm("Do you want to cancel the current status?")) {
-                    logButtonClick(buttonId, "No status");
+                if (confirm("Do you want to stop the current status?")) {
+                    logButtonClick(buttonId, "Stop");
                     selectedButton = null;
                     currentStatus.textContent= "None";
                     statusImage.style.display = "none";
@@ -285,6 +417,10 @@
         }
 
         window.onload = function() {
+            showPage('page1');
+        }
+
+        window.onload = function() {
             alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
         };
 
@@ -309,11 +445,17 @@
         });
 
         document.getElementById("cancelButton").addEventListener("click", function() {
-            logButtonClick(selectedButton, "No status");
-            selectedButton = null;
-            currentStatus.textContent = "None";
-            statusImage.style.display = "none";
-            resetButtonStates();
+            if (selectedButton === 5 || selectedButton === null) {
+                alert("No state now, no need to cancel!")
+            }
+            else {
+                if(confirm("Do you want to cancel the status?\n\nOnly if you selected a wrong button, you need to cancel it. ")) {
+                    logButtonClick(selectedButton, "Cancel");
+                    selectedButton = null;
+                    currentStatus.textContent = "None";
+                    statusImage.style.display = "none";
+                    resetButtonStates();}
+                }
         });
 
         document.getElementById("nameInput").addEventListener("change", function() {
