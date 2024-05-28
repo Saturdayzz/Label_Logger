@@ -317,12 +317,7 @@
             document.body.appendChild(link);
             link.click();
             median.share.downloadFile({url: link, open: true})
-            const newWindow = window.open(encodedUri, '_blank');
-            if (newWindow) {
-                newWindow.focus();
-            } else {
-                alert("Please allow popups for this website to download the file.");
-            }
+            
         }
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
