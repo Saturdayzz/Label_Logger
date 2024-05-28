@@ -241,7 +241,6 @@
 
         function saveCookies() {
             var value = buttonLogs;
-            window.localStorage.setItem("loglocal", value);
             var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 72).toUTCString(); // Set expiration time to 72 hours from now
             document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
         }
@@ -263,7 +262,6 @@
         }
 
         function renderLogs() {
-            saveCookies();
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
@@ -271,6 +269,7 @@
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
+            saveCookies();
         }
 
         function addRecord() {
