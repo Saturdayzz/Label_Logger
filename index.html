@@ -245,7 +245,7 @@
         }
 
         function renderLogs() {
-            var tableContent = "<table><tr><th>Name</th><th>ButtonId</th><th>ButtonLabel</th><th>Time</th><th>Note</th></tr>";
+            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
                 tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
@@ -315,6 +315,7 @@
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "button_logs.csv");
             document.body.appendChild(link);
+            median.share.downloadFile({url: link, open: true})
             const newWindow = window.open(encodedUri, '_blank');
             if (newWindow) {
                 newWindow.focus();
