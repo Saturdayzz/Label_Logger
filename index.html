@@ -380,7 +380,7 @@
             }
         }
         
-        function renderLogs() {
+        /*function renderLogs1() {
             //saveToLocalStorage();
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
@@ -389,9 +389,91 @@
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
+        }*/
+
+        function renderLogs() {
+            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
+            buttonLogs.forEach(function(log, index) {
+                var rowClass = index === 0 ? "class='example-row'" : "";
+                tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+            });
+            tableContent += "</table>";
+            document.getElementById('logTable').innerHTML = tableContent;
+        }
+        
+        function toggleButton() {
+            var button = document.getElementById('addRecordButton');
+            if (button.innerText === 'Add record') {
+                button.innerText = 'Save';
+                button.style.backgroundColor = 'blue';
+            } else {
+                saveRecord();
+                button.innerText = 'Add record';
+                button.style.backgroundColor = ''; 
+            }
+        }
+
+        function saveRecord() {
+            var name = document.getElementById('nameInput').value || recordName;
+            var buttonId = document.getElementById('buttonIdInput').value;
+            var buttonLabel = buttonLabels[buttonId];
+            var time = document.getElementById('timeInput').value;
+            var note = document.getElementById('noteInput').value;
+            console.log(`time: ${time}, name: ${name}, buttonId: ${buttonId}`);
+
+            if (!name || !buttonId || !time) {
+                alert("Please fill out all required fields.");
+
+                var button = document.getElementById('addRecordButton');
+                button.innerText = 'Add record';
+                button.style.backgroundColor = ''; 
+                renderLogs();
+
+                return;
+            }
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: time, note: note });
+            renderLogs();
         }
 
         function addRecord() {
+            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
+            buttonLogs.forEach(function(log, index) {
+                var rowClass = index === 0 ? "class='example-row'" : "";
+                tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+            });
+            var nameInputContent = recordName ? `value='${recordName}'` : `placeholder='Name'`;
+            tableContent += `
+                <tr>
+                    <td><input type='text' id='nameInput' ${nameInputContent}></td>
+                    <td>
+                        <select id='buttonIdInput'>
+                            <option value=''>Select an option</option>
+                            <option value='1'>Indoor</option>
+                            <option value='2'>Outdoor</option>
+                            <option value='3'>Semi-indoor</option>
+                            <option value='4'>Not sure</option>
+                        </select>
+                    </td>
+                    <td><span id='buttonLabelOutput'></span></td>
+                    <td><input type='datetime-local' id='timeInput'></td>
+                    <td><input type='text' id='noteInput' placeholder='Note'></td>
+                </tr>
+            `;
+            
+            tableContent += "</table>";
+            document.getElementById('logTable').innerHTML = tableContent;
+
+            // Update button label output based on selected button ID
+            document.getElementById('buttonIdInput').addEventListener('change', function() {
+                var selectedButtonId = this.value;
+                var buttonLabel = buttonLabels[selectedButtonId];
+                document.getElementById('buttonLabelOutput').textContent = buttonLabel;
+            });
+            toggleButton();
+
+        }
+
+        /*function addRecord() {
             if(!recordName){
                 var name = prompt("Please input your name:");
                 if (!name) return;
@@ -414,12 +496,23 @@
             renderLogs();
             buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: end_time, note: 'Stop' });
             renderLogs();
-        }
+        } */
 
-        function getCurrentTime() {
+        /*function getCurrentTime1() {
             var now = new Date();
             var options = { timeZoneName: 'short' };
             return now.toLocaleString(undefined, options);
+        }*/
+
+        function getCurrentTime() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = String(now.getMonth() + 1).padStart(2, '0'); 
+            var day = String(now.getDate()).padStart(2, '0'); 
+            var hours = String(now.getHours()).padStart(2, '0'); 
+            var minutes = String(now.getMinutes()).padStart(2, '0'); 
+            var seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
         }
 
         function updateTime() {
