@@ -235,7 +235,7 @@
 
     <div id="page2" class="content">
         <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
-        <button id="addRecordButton" onclick="addRecord()">Add record</button>
+        <button id="addRecordButton" onclick="toggleButton()">Add record</button>
         <div id="logTable"></div>
     </div>
 
@@ -375,6 +375,9 @@
             document.getElementById(pageId).classList.add('active');
             if (pageId === 'page2') {
                 renderLogs();
+                var button = document.getElementById('addRecordButton');
+                button.innerText = 'Add record';
+                button.style.backgroundColor = '';
             } else if (pageId === 'page3') {
                 loadintialTodoList();
             }
@@ -404,6 +407,7 @@
         function toggleButton() {
             var button = document.getElementById('addRecordButton');
             if (button.innerText === 'Add record') {
+                addRecord();
                 button.innerText = 'Save';
                 button.style.backgroundColor = 'blue';
             } else {
@@ -414,7 +418,7 @@
         }
 
         function saveRecord() {
-            var name = document.getElementById('nameInput').value || recordName;
+            var name = document.getElementById('nameInput2').value || recordName;
             var buttonId = document.getElementById('buttonIdInput').value;
             var buttonLabel = buttonLabels[buttonId];
             var time = document.getElementById('timeInput').value;
@@ -444,7 +448,7 @@
             var nameInputContent = recordName ? `value='${recordName}'` : `placeholder='Name'`;
             tableContent += `
                 <tr>
-                    <td><input type='text' id='nameInput' ${nameInputContent}></td>
+                    <td><input type='text' id='nameInput2' ${nameInputContent}></td>
                     <td>
                         <select id='buttonIdInput'>
                             <option value=''>Select an option</option>
@@ -459,6 +463,23 @@
                     <td><input type='text' id='noteInput' placeholder='Note'></td>
                 </tr>
             `;
+            tableContent += `
+                <tr>
+                    <td><input type='text' id='nameInput2' ${nameInputContent}></td>
+                    <td>
+                        <select id='buttonIdInput2'>
+                            <option value=''>Select an option</option>
+                            <option value='1'>Indoor</option>
+                            <option value='2'>Outdoor</option>
+                            <option value='3'>Semi-indoor</option>
+                            <option value='4'>Not sure</option>
+                        </select>
+                    </td>
+                    <td><span id='buttonLabelOutput2'></span></td>
+                    <td><input type='datetime-local' id='timeInput2'></td>
+                    <td><span id='noteInput2'>Stop</span></td>
+                </tr>
+            `;
             
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
@@ -469,7 +490,6 @@
                 var buttonLabel = buttonLabels[selectedButtonId];
                 document.getElementById('buttonLabelOutput').textContent = buttonLabel;
             });
-            toggleButton();
 
         }
 
