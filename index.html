@@ -421,7 +421,7 @@
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
-                tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
@@ -608,10 +608,12 @@
                         });
                         this.classList.add('selected-row');
                         var rowIndex = this.getAttribute('data-index');
+                        console.log("rowIndex:"+rowIndex);
                         setTimeout(() => {
                             if (confirm("Are you sure you want to delete this record?")) {
                                 var delete_rowIndex = rowIndex;
                                 deleteRow(delete_rowIndex);
+                                listenRecordClick();
                             }else{
                                 this.classList.remove('selected-row');
                             }
