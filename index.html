@@ -70,7 +70,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; 
         }
 
         button#button4:hover {
@@ -82,7 +82,7 @@
         }
 
         button#deleteRecordButton {
-            background-color: #9d9999;
+            background-color: #918e8e;
         }
 
         button#randomTodoListButton {
@@ -192,6 +192,9 @@
             background-color: #ffffcc; 
             color: #000; 
         }
+        .selected-row {
+            background-color: #d3d3d3; /* 灰色 */
+        }
         h1 .icon {
             margin-left: 5px;
             width: 40px;
@@ -254,7 +257,7 @@
         <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
-            <button id="deleteRecordButton" onclick="deleteRecord()">Delete record</button>
+            <button id="deleteRecordButton" onclick="toggleButton_delete()">Delete record</button>
         </div>
         <div id="logTable"></div>
     </div>
@@ -433,10 +436,27 @@
                 }
                 addRecord();
                 button.innerText = 'Save';
-                button.style.backgroundColor = 'blue';
+                button.style.backgroundColor = '#1576ff';
             } else {
                 saveRecord();
                 button.innerText = 'Add record';
+                button.style.backgroundColor = ''; 
+            }
+        }
+
+        function toggleButton_delete() {
+            var button = document.getElementById('deleteRecordButton');
+            if (button.innerText === 'Delete record') {
+                if (!recordName){
+                    alert("Please input your name at 'Home' page first :)");
+                    return;
+                }
+                deleteRecord();
+                button.innerText = 'Deleting...';
+                button.style.backgroundColor = '#1576ff';
+            } else {
+                
+                button.innerText = 'Delete record';
                 button.style.backgroundColor = ''; 
             }
         }
@@ -572,6 +592,40 @@
             buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: end_time, note: 'Stop' });
             renderLogs();
         } */
+
+        function deleteRecord(){
+            alert("Please click the row you want to delete!")
+            listenRecordClick();
+        }
+
+        function listenRecordClick(){
+            var rows = document.querySelectorAll('#logTable tr');
+            rows.forEach(function(row, index) {
+                if (index > 1) {
+                    row.addEventListener('click', function() {
+                        rows.forEach(function(r) {
+                            r.classList.remove('selected-row');
+                        });
+                        this.classList.add('selected-row');
+                        var rowIndex = this.getAttribute('data-index');
+                        setTimeout(() => {
+                            if (confirm("Are you sure you want to delete this record?")) {
+                                var delete_rowIndex = rowIndex;
+                                deleteRow(delete_rowIndex);
+                            }else{
+                                this.classList.remove('selected-row');
+                            }
+                        }, 150);
+                    });
+                }
+            });
+        }
+
+        function deleteRow(delete_rowIndex){
+            buttonLogs.splice(delete_rowIndex, 1);
+            renderLogs();
+            return;
+        }
 
         /*function getCurrentTime1() {
             var now = new Date();
@@ -757,7 +811,8 @@
             }
             else {
                 if(confirm("Do you want to cancel the status?\n\nOnly if you selected a wrong button, you need to cancel it. ")) {
-                    logButtonClick(selectedButton, "Cancel");
+                    deleteRow(buttonLogs.length - 1)
+                    //logButtonClick(selectedButton, "Cancel");
                     selectedButton = null;
                     currentStatus.textContent = "None";
                     statusImage.style.display = "none";
