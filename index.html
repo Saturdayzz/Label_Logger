@@ -78,7 +78,15 @@
         }
 
         button#addRecordButton {
-            background-color: #dc3545;
+            background-color: #ed3d49;
+        }
+
+        button#deleteRecordButton {
+            background-color: #9d9999;
+        }
+
+        button#randomTodoListButton {
+            background-color: #00b318;
         }
 
         #exportButton {
@@ -211,7 +219,16 @@
             background-color: #cccccc; 
             color: #999999;
             cursor: not-allowed; 
-}
+        }
+        #buttonContainer {
+            display: flex;
+            gap: 10px;
+        }
+
+        #buttonContainer button {
+            width: auto; 
+            flex: 1; 
+        }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
@@ -235,7 +252,10 @@
 
     <div id="page2" class="content">
         <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
-        <button id="addRecordButton" onclick="toggleButton()">Add record</button>
+        <div id="buttonContainer">
+            <button id="addRecordButton" onclick="toggleButton()">Add record</button>
+            <button id="deleteRecordButton" onclick="deleteRecord()">Delete record</button>
+        </div>
         <div id="logTable"></div>
     </div>
 
@@ -407,6 +427,10 @@
         function toggleButton() {
             var button = document.getElementById('addRecordButton');
             if (button.innerText === 'Add record') {
+                if (!recordName){
+                    alert("Please input your name at 'Home' page first :)");
+                    return;
+                }
                 addRecord();
                 button.innerText = 'Save';
                 button.style.backgroundColor = 'blue';
@@ -423,7 +447,9 @@
             var buttonLabel = buttonLabels[buttonId];
             var time = document.getElementById('timeInput').value;
             var note = document.getElementById('noteInput').value;
-            console.log(`time: ${time}, name: ${name}, buttonId: ${buttonId}`);
+            var time2 = document.getElementById('timeInput2').value;
+            var note2 = document.getElementById('noteInput2').textContent;
+            //console.log(`time: ${time}, name: ${name}, buttonId: ${buttonId}`);
 
             if (!name || !buttonId || !time) {
                 alert("Please fill out all required fields.");
@@ -436,6 +462,7 @@
                 return;
             }
             buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: time, note: note });
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: time2, note: note2 });
             renderLogs();
         }
 
@@ -445,10 +472,11 @@
                 var rowClass = index === 0 ? "class='example-row'" : "";
                 tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
             });
-            var nameInputContent = recordName ? `value='${recordName}'` : `placeholder='Name'`;
+            //var nameInputContent = recordName ? `value='${recordName}'` : `placeholder='Name'`;
+            //<td><input type='text' id='nameInput2' ${nameInputContent}></td>
             tableContent += `
                 <tr>
-                    <td><input type='text' id='nameInput2' ${nameInputContent}></td>
+                    <td><span id='nameInput2'>${recordName}</span></td>
                     <td>
                         <select id='buttonIdInput'>
                             <option value=''>Select an option</option>
@@ -465,7 +493,7 @@
             `;
             tableContent += `
                 <tr>
-                    <td><input type='text' id='nameInput2' ${nameInputContent}></td>
+                    <td><span id='nameInput2'>${recordName}</span></td>
                     <td>
                         <select id='buttonIdInput2'>
                             <option value=''>Select an option</option>
@@ -489,7 +517,34 @@
                 var selectedButtonId = this.value;
                 var buttonLabel = buttonLabels[selectedButtonId];
                 document.getElementById('buttonLabelOutput').textContent = buttonLabel;
+                document.getElementById('buttonIdInput2').value = selectedButtonId;
+                document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
             });
+            document.getElementById('buttonIdInput2').addEventListener('change', function() {
+                var selectedButtonId = this.value;
+                var buttonLabel = buttonLabels[selectedButtonId];
+                document.getElementById('buttonLabelOutput').textContent = buttonLabel;
+                document.getElementById('buttonIdInput').value = selectedButtonId;
+                document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
+            });
+            document.getElementById('timeInput').addEventListener('change', function() {
+                var dateTime = this.value;
+                var timeInput3 = document.getElementById('timeInput2');
+
+                if (dateTime) {
+                    var datePart = dateTime.split('T')[0];
+                    var timePart = timeInput3.value.split('T')[1] || "00:00"; 
+                    timeInput3.value = datePart + 'T' + timePart;
+                }
+            });
+            /*document.getElementById('nameInput2').addEventListener('input', function() {
+                var name = this.value;
+                document.getElementById('nameInput3').value = name;
+            });
+            document.getElementById('nameInput3').addEventListener('input', function() {
+                var name = this.value;
+                document.getElementById('nameInput2').value = name;
+            });*/
 
         }
 
