@@ -321,7 +321,7 @@
         var timeDisplay = document.getElementById("timeDisplay");
         var statusImage = document.getElementById("statusImage");
         var buttonLogs = [
-        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", time: "10:00:00", note: "Note 1" }
+        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", date:"15/04/2024",time :"8:31:57",timeZone: "GMT+2", note: "Note 1" }
         ];
         var buttonLabels = {
             "1": "indoor",
@@ -479,10 +479,10 @@
         }*/
 
         function renderLogs() {
-            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
+            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
-                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
@@ -516,7 +516,7 @@
                 button.innerText = 'Deleting...';
                 button.style.backgroundColor = '#1576ff';
             } else {
-                
+                renderLogs();
                 button.innerText = 'Delete record';
                 button.style.backgroundColor = ''; 
             }
@@ -526,8 +526,13 @@
             var name = document.getElementById('nameInput2').value || recordName;
             var buttonId = document.getElementById('buttonIdInput').value;
             var buttonLabel = buttonLabels[buttonId];
+            var timezone = document.getElementById('timezoneInput').value;
+
+            var date = document.getElementById('dateInput').value;
             var time = document.getElementById('timeInput').value;
             var note = document.getElementById('noteInput').value;
+
+            var date2 = document.getElementById('dateInput2').value;
             var time2 = document.getElementById('timeInput2').value;
             var note2 = document.getElementById('noteInput2').textContent;
             //console.log(`time: ${time}, name: ${name}, buttonId: ${buttonId}`);
@@ -542,19 +547,29 @@
 
                 return;
             }
-            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: time, note: note });
-            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, time: time2, note: note2 });
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel,date:date, time: time,timeZone:timezone,note: note });
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, date:date2, time: time2,timeZone:timezone, note: note2 });
             renderLogs();
         }
 
+        function setDefaultDate(){
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = String(now.getMonth() + 1).padStart(2, '0'); 
+            var day = String(now.getDate()).padStart(2, '0'); 
+            var date = `${year}-${month}-${day}`;
+            return date;
+        }
+
         function addRecord() {
-            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Time</th><th>Note</th></tr>";
+            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 var rowClass = index === 0 ? "class='example-row'" : "";
-                tableContent += "<tr " + rowClass + "><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.time + "</td><td>" + log.note + "</td></tr>";
+                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
             });
             //var nameInputContent = recordName ? `value='${recordName}'` : `placeholder='Name'`;
             //<td><input type='text' id='nameInput2' ${nameInputContent}></td>
+            var currentDate = setDefaultDate();
             tableContent += `
                 <tr>
                     <td><span id='nameInput2'>${recordName}</span></td>
@@ -568,7 +583,9 @@
                         </select>
                     </td>
                     <td><span id='buttonLabelOutput'></span></td>
-                    <td><input type='datetime-local' id='timeInput'></td>
+                    <td><input type='date' id='dateInput' value='${currentDate}'></td>
+                    <td><input type='time' id='timeInput'></td>
+                    <td><input type='text' id='timezoneInput' value='GMT+2'></td>
                     <td><input type='text' id='noteInput' placeholder='Note'></td>
                 </tr>
             `;
@@ -585,7 +602,9 @@
                         </select>
                     </td>
                     <td><span id='buttonLabelOutput2'></span></td>
-                    <td><input type='datetime-local' id='timeInput2'></td>
+                    <td><input type='date' id='dateInput2' value='${currentDate}'></td>
+                    <td><input type='time' id='timeInput2'></td>
+                    <td><input type='text' id='timezoneInput2' value='GMT+2'></td>
                     <td><span id='noteInput2'>Stop</span></td>
                 </tr>
             `;
@@ -608,7 +627,7 @@
                 document.getElementById('buttonIdInput').value = selectedButtonId;
                 document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
             });
-            document.getElementById('timeInput').addEventListener('change', function() {
+            /*document.getElementById('timeInput').addEventListener('change', function() {
                 var dateTime = this.value;
                 var timeInput3 = document.getElementById('timeInput2');
 
@@ -617,15 +636,15 @@
                     var timePart = timeInput3.value.split('T')[1] || "00:00"; 
                     timeInput3.value = datePart + 'T' + timePart;
                 }
-            });
-            /*document.getElementById('nameInput2').addEventListener('input', function() {
-                var name = this.value;
-                document.getElementById('nameInput3').value = name;
-            });
-            document.getElementById('nameInput3').addEventListener('input', function() {
-                var name = this.value;
-                document.getElementById('nameInput2').value = name;
             });*/
+            document.getElementById('timezoneInput').addEventListener('input', function() {
+                var timezone = this.value;
+                document.getElementById('timezoneInput2').value = timezone;
+            });
+            document.getElementById('timezoneInput2').addEventListener('input', function() {
+                var timezone = this.value;
+                document.getElementById('timezoneInput').value = timezone;
+            });
 
         }
 
@@ -698,20 +717,19 @@
 
         function getCurrentTime() {
             var now = new Date();
-            var year = now.getFullYear();
-            var month = String(now.getMonth() + 1).padStart(2, '0'); 
-            var day = String(now.getDate()).padStart(2, '0'); 
-            var hours = String(now.getHours()).padStart(2, '0'); 
-            var minutes = String(now.getMinutes()).padStart(2, '0'); 
-            var seconds = String(now.getSeconds()).padStart(2, '0');
-            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+            var dateString = now.toLocaleDateString('en-GB');
+            var timeString = now.toLocaleTimeString('en-GB');
+            var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+            return { date: dateString, time: timeString, timeZone: timeZoneString };
         }
 
         function updateTime() {
             var now = new Date();
-            var options = { timeZoneName: 'short' };
-            var timeString = now.toLocaleTimeString(undefined, options);
-            document.getElementById('currentTime').textContent = timeString;
+            var dateString = now.toLocaleDateString('en-GB');
+            var timeString = now.toLocaleTimeString('en-GB');
+            var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+            var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
+            document.getElementById('currentTime').textContent = dateTimeString;
         }
 
         setInterval(updateTime, 1000);
@@ -719,7 +737,7 @@
         function logButtonClick(buttonId, note) {
             var time = getCurrentTime();
             var buttonLabel = buttonLabels[buttonId] || "unknown";
-            buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, time: time, name: recordName, note: note });
+            buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note });
         }
 
         function createCsvBlob() {
@@ -874,7 +892,7 @@
             }
             else {
                 if(confirm("Do you want to cancel the status?\n\nOnly if you selected a wrong button, you need to cancel it. ")) {
-                    deleteRow(buttonLogs.length - 1)
+                    deleteRow(buttonLogs.length - 1);
                     //logButtonClick(selectedButton, "Cancel");
                     selectedButton = null;
                     currentStatus.textContent = "None";
