@@ -348,48 +348,39 @@
             let random_buttonClicked = false;
             let todoListIndex = null;
 
-            /*function saveToLocalStorage() {
-                var value = buttonLogs;
-                window.localStorage.setItem("loglocal", value);
-            }*/
+            //////////////
 
-            ///////////
+        setInterval(function () {
+            // Local Storage
+            var storageValue = window.localStorage.getItem("testKey");
+            document.getElementById("nameInput").innerHTML = `${storageValue || "NULL"}`;
+                
+                // Cookie
+                //var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
+                //var cookieValue = cookie ? cookie.pop() : null;
+                //document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
+            }, 1000);
+            
+            function saveToLocalStorage() {
+                var value = recordName;
+                window.localStorage.setItem("testKey", value);
+            }
+            
+            function saveCookie() {
+                var value = document.getElementById("cookieInput").value;
+                var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
+                document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
+                document.getElementById("cookieInput").value = "";
+            }
+            
             function clearCache() {
-                median.webview.clearCache();
-                renderLogs();
+                gonative.webview.clearCache();
             }
+            
+            function clearCookies() {
+                gonative.webview.clearCookies();
+        }
 
-            function loadintialTodoList(){
-                if (!todoListIndex) {
-                    const { todos } = getRandomTodoList();
-                    renderTodoList(todos);
-                }
-            }
-            ////////////////
-                // 存储数据到 LocalStorage
-            function saveToLocalStorage(key, value) {
-                localStorage.setItem(key, value);
-            }
-
-            // 从 LocalStorage 读取数据
-            function getFromLocalStorage(key) {
-                return localStorage.getItem(key);
-            }
-
-            // 删除 LocalStorage 中的数据
-            function removeFromLocalStorage(key) {
-                localStorage.removeItem(key);
-            }
-
-            // 示例：保存数据到 LocalStorage 并读取
-            window.onload = function() {
-                saveToLocalStorage('username', recordName);
-                const username = getFromLocalStorage('username');
-                console.log('Stored username:', username);
-
-                // 删除数据
-                //removeFromLocalStorage('username');
-            };
 
 
             ///////////////
@@ -931,6 +922,7 @@
 
         document.getElementById("nameInput").addEventListener("change", function() {
             recordName = this.value;
+            saveToLocalStorage();
         });
 
         updateTime(); // Initial call to set time immediately
