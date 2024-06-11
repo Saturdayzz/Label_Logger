@@ -897,13 +897,10 @@
 
         window.onload = function() {
             showPage('page1');
+            alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
             var storedValue = window.localStorage.getItem("testKey");
             var inputValue = storedValue ? storedValue : "";
-            document.getElementById('nameInput').value = inputValue;
-        }
-
-        window.onload = function() {
-            alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+            document.getElementById("nameInput").value = inputValue;
         };
 
         document.getElementById("button1").addEventListener("click", function() {
