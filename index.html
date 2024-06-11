@@ -233,6 +233,45 @@
             flex: 1; 
         }
 
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+            word-wrap: break-word; 
+        }
+
+        .todo-list-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .todo-checkbox {
+            margin-right: 10px;
+        }
+
+        .todo-label {
+            flex-grow: 1;
+            white-space: pre-wrap;
+        }
+
+        .smiley {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-image: url('images/smiley.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
 </head>
@@ -263,7 +302,7 @@
     </div>
 
     <div id="page3" class="content">
-        <h1>Embark on Your Data Journey!</h1>
+        <h1>Embark on Your Data Journey!<img src="images/journey.svg" class="icon" alt="Log Icon"></h1>
         <button id="randomTodoListButton">Change Scenario</button>
         <div id="todoListContainer"></div>
     </div>
@@ -304,10 +343,10 @@
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
-                ["Task 1.1", "Task 1.2", "Task 1.3", "Task 1.4", "Task 1.5", "Task 1.6", "Task 1.7", "Task 1.8", "Task 1.9", "Task 1.10"],
-                ["Task 2.1", "Task 2.2", "Task 2.3", "Task 2.4", "Task 2.5", "Task 2.6", "Task 2.7", "Task 2.8", "Task 2.9", "Task 2.10"],
-                ["Task 3.1", "Task 3.2", "Task 3.3", "Task 3.4", "Task 3.5", "Task 3.6", "Task 3.7", "Task 3.8", "Task 3.9", "Task 3.10"],
-                ["Task 4.1", "Task 4.2", "Task 4.3", "Task 4.4", "Task 4.5", "Task 4.6", "Task 4.7", "Task 4.8", "Task 4.9", "Task 4.10"],
+                ["Task 1.1111111111111111111111111111", "Task 1.2", "Task 1.3", "Task 1.4", "Task 1.5", "Task 1.6", "Task 1.7", "Task 1.8", "Task 1.9", "Task 1.10"],
+                ["Task 2.111111111111111111111111111111111111111111", "Task 2.2", "Task 2.3", "Task 2.4", "Task 2.5", "Task 2.6", "Task 2.7", "Task 2.8", "Task 2.9", "Task 2.10"],
+                ["Task 3.111111111111111111111111111111111111111111111", "Task 3.2", "Task 3.3", "Task 3.4", "Task 3.5", "Task 3.6", "Task 3.7", "Task 3.8", "Task 3.9", "Task 3.10"],
+                ["Task 4.1111111111111111111111111111111111111111111", "Task 4.2", "Task 4.3", "Task 4.4", "Task 4.5", "Task 4.6", "Task 4.7", "Task 4.8", "Task 4.9", "Task 4.10"],
                 ["Task 5.1", "Task 5.2", "Task 5.3", "Task 5.4", "Task 5.5", "Task 5.6", "Task 5.7", "Task 5.8", "Task 5.9", "Task 5.10"],
                 ["Task 6.1", "Task 6.2", "Task 6.3", "Task 6.4", "Task 6.5", "Task 6.6", "Task 6.7", "Task 6.8", "Task 6.9", "Task 6.10"],
                 ["Task 7.1", "Task 7.2", "Task 7.3", "Task 7.4", "Task 7.5", "Task 7.6", "Task 7.7", "Task 7.8", "Task 7.9", "Task 7.10"],
@@ -342,34 +381,56 @@
                 const todoListContainer = document.getElementById("todoListContainer");
                 todoListContainer.innerHTML = "";
 
-                const ul = document.createElement("ul");
+                const todoList = document.createElement("div");
+                todoList.className = "todo-list";
+
                 todos.forEach((todo, todoIndex) => {
-                    const li = document.createElement("li");
+                    const todoItem = document.createElement("div");
+                    todoItem.className = "todo-list-item";
 
                     const checkbox = document.createElement("input");
                     checkbox.type = "checkbox";
                     checkbox.id = `todo-${todoIndex}`;
+                    checkbox.className = "todo-checkbox";
                     checkbox.addEventListener("change", function() {
-                        const label = li.querySelector('label');
+                        const label = todoItem.querySelector('.todo-label');
                         if (checkbox.checked) {
                             label.style.textDecoration = "line-through";
                             label.style.color = "gray";
+
+                            const smiley = document.createElement("span");
+                            smiley.className = "smiley";
+                            label.appendChild(smiley);
                         } else {
                             label.style.textDecoration = "none";
                             label.style.color = "black";
+
+                            const smiley = label.querySelector('.smiley');
+                            if (smiley) {
+                                label.removeChild(smiley);
+                            }
+                        }
+
+                        const allChecked = document.querySelectorAll('.todo-checkbox:checked').length === todos.length;
+                        if (allChecked) {
+                            setTimeout(()=>{
+                                alert("Congratulation! You completed the data collection, thank you very much! Now please export the log and send to the aassigned mail address.");
+                            },150);
                         }
                     });
-                    
-                    const label = document.createElement("label");
-                    label.htmlFor = checkbox.id;
-                    label.textContent = todo;
 
-                    li.appendChild(checkbox);
-                    li.appendChild(label);
-                    ul.appendChild(li);
+                    const label = document.createElement("label");
+                    label.htmlFor = `todo-${todoIndex}`;
+                    label.textContent = todo;
+                    label.className = "todo-label";
+
+                    todoItem.appendChild(checkbox);
+                    todoItem.appendChild(label);
+                    todoList.appendChild(todoItem);
                 });
-                todoListContainer.appendChild(ul);
-        }
+
+                todoListContainer.appendChild(todoList);
+            }
 
         randomTodoListButton.addEventListener("click", function() {
             console.log("Button clicked!");
