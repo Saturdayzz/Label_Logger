@@ -350,7 +350,7 @@
 
             //////////////
 
-        setInterval(function () {
+        /*setInterval(function () {
             // Local Storage
             var storageValue = window.localStorage.getItem("testKey");
             document.getElementById("nameInput").innerHTML = `${storageValue || "NULL"}`;
@@ -359,10 +359,11 @@
                 //var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
                 //var cookieValue = cookie ? cookie.pop() : null;
                 //document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
-            }, 1000);
+            }, 1000);*/
             
             function saveToLocalStorage() {
                 var value = recordName;
+                alert("save name!");
                 window.localStorage.setItem("testKey", value);
             }
             
