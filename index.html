@@ -314,32 +314,21 @@
     </div>
 
     <script>
-        var buttonLogs = [];
-        var recordName;
-        var selectedButton = null;
-        var statusDisplay = document.getElementById("statusDisplay");
-        var timeDisplay = document.getElementById("timeDisplay");
-        var statusImage = document.getElementById("statusImage");
-        var buttonLogs = [
-        { name: "John Doe", buttonId: "1", buttonLabel: "indoor", date:"15/04/2024",time :"8:31:57",timeZone: "GMT+2", note: "Note 1" }
-        ];
-        var buttonLabels = {
-            "1": "indoor",
-            "2": "outdoor",
-            "3": "semi-indoor",
-            "4": "not sure"
-        };
-        
-
-        function saveToLocalStorage() {
-            var value = buttonLogs;
-            window.localStorage.setItem("loglocal", value);
-        }
-
-        function clearCache() {
-            gonative.webview.clearCache();
-            renderLogs();
-        }
+            var buttonLogs = [];
+            var recordName;
+            var selectedButton = null;
+            var statusDisplay = document.getElementById("statusDisplay");
+            var timeDisplay = document.getElementById("timeDisplay");
+            var statusImage = document.getElementById("statusImage");
+            var buttonLogs = [
+            { name: "John Doe", buttonId: "1", buttonLabel: "indoor", date:"15/04/2024",time :"8:31:57",timeZone: "GMT+2", note: "Note 1" }
+            ];
+            var buttonLabels = {
+                "1": "indoor",
+                "2": "outdoor",
+                "3": "semi-indoor",
+                "4": "not sure"
+            };
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
@@ -359,12 +348,51 @@
             let random_buttonClicked = false;
             let todoListIndex = null;
 
+            /*function saveToLocalStorage() {
+                var value = buttonLogs;
+                window.localStorage.setItem("loglocal", value);
+            }*/
+
+            ///////////
+            function clearCache() {
+                median.webview.clearCache();
+                renderLogs();
+            }
+
             function loadintialTodoList(){
                 if (!todoListIndex) {
                     const { todos } = getRandomTodoList();
                     renderTodoList(todos);
                 }
             }
+            ////////////////
+                // 存储数据到 LocalStorage
+            function saveToLocalStorage(key, value) {
+                localStorage.setItem(key, value);
+            }
+
+            // 从 LocalStorage 读取数据
+            function getFromLocalStorage(key) {
+                return localStorage.getItem(key);
+            }
+
+            // 删除 LocalStorage 中的数据
+            function removeFromLocalStorage(key) {
+                localStorage.removeItem(key);
+            }
+
+            // 示例：保存数据到 LocalStorage 并读取
+            window.onload = function() {
+                saveToLocalStorage('username', recordName);
+                const username = getFromLocalStorage('username');
+                console.log('Stored username:', username);
+
+                // 删除数据
+                //removeFromLocalStorage('username');
+            };
+
+
+            ///////////////
 
             function getRandomTodoList(ex_index=null) {
                 let randomIndex = Math.floor(Math.random() * todoLists.length);
@@ -688,7 +716,7 @@
                         });
                         this.classList.add('selected-row');
                         var rowIndex = this.getAttribute('data-index');
-                        console.log("rowIndex:"+rowIndex);
+                        //console.log("rowIndex:"+rowIndex);
                         setTimeout(() => {
                             if (confirm("Are you sure you want to delete this record?")) {
                                 var delete_rowIndex = rowIndex;
