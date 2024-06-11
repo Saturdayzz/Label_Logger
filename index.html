@@ -348,43 +348,60 @@
             let random_buttonClicked = false;
             let todoListIndex = null;
 
-            //////////////
+            /*function saveToLocalStorage() {
+                var value = buttonLogs;
+                window.localStorage.setItem("loglocal", value);
+            }*/
 
+            ///////////
+            function clearCache() {
+                median.webview.clearCache();
+                renderLogs();
+            }
+
+            
+            ////////////////
+                
         /*setInterval(function () {
             // Local Storage
             var storageValue = window.localStorage.getItem("testKey");
-            document.getElementById("nameInput").innerHTML = `${storageValue || "NULL"}`;
-                
-                // Cookie
-                //var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
-                //var cookieValue = cookie ? cookie.pop() : null;
-                //document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
-            }, 1000);*/
+            document.getElementById("localStorageData").innerHTML = `Local Storage: ${storageValue || "NULL"}`;
             
-            function saveToLocalStorage() {
-                var value = recordName;
-                alert("save name!");
-                window.localStorage.setItem("testKey", value);
-            }
-            
-            function saveCookie() {
-                var value = document.getElementById("cookieInput").value;
-                var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
-                document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
-                document.getElementById("cookieInput").value = "";
-            }
-            
-            function clearCache() {
-                gonative.webview.clearCache();
-            }
-            
-            function clearCookies() {
-                gonative.webview.clearCookies();
+            // Cookie
+            var cookie = document.cookie.match(`(^|;)\\s*testKey\\s*=\\s*([^;]+)`);
+            var cookieValue = cookie ? cookie.pop() : null;
+            document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
+        }, 1000);*/
+        
+        function saveToLocalStorage() {
+            var value = recordName;
+            window.localStorage.setItem("testKey", value);
+        }
+        
+        function saveCookie() {
+            var value = document.getElementById("cookieInput").value;
+            var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
+            document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
+            document.getElementById("cookieInput").value = "";
+        }
+        
+        function clearCache() {
+            gonative.webview.clearCache();
+        }
+        
+        function clearCookies() {
+            gonative.webview.clearCookies();
         }
 
 
 
             ///////////////
+            function loadintialTodoList(){
+                if (!todoListIndex) {
+                    const { todos } = getRandomTodoList();
+                    renderTodoList(todos);
+                }
+            }
 
             function getRandomTodoList(ex_index=null) {
                 let randomIndex = Math.floor(Math.random() * todoLists.length);
@@ -880,6 +897,9 @@
 
         window.onload = function() {
             showPage('page1');
+            var storedValue = window.localStorage.getItem("testKey");
+            var inputValue = storedValue ? storedValue : "";
+            document.getElementById('nameInput').value = inputValue;
         }
 
         window.onload = function() {
