@@ -314,7 +314,6 @@
     </div>
 
     <script>
-            var buttonLogs = [];
             var recordName;
             var selectedButton = null;
             var statusDisplay = document.getElementById("statusDisplay");
@@ -348,19 +347,24 @@
             let random_buttonClicked = false;
             let todoListIndex = null;
 
-            /*function saveToLocalStorage() {
-                var value = buttonLogs;
-                window.localStorage.setItem("loglocal", value);
-            }*/
+            window.onload = function() {
+                showPage('page1');
 
-            ///////////
-            function clearCache() {
-                median.webview.clearCache();
-                renderLogs();
-            }
+                //localStorage.removeItem("todosKey");
+                var storedName = window.localStorage.getItem("nameKey")? window.localStorage.getItem("nameKey") : "";
+                document.getElementById("nameInput").value = storedName;
+                recordName = storedName;
 
-            
-            ////////////////
+                var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
+                buttonLogs = storedLog;
+
+                var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : random_buttonClicked;
+                random_buttonClicked = storedRandomButtonClicked;
+                var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                
+                alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+            };
+
                 
         /*setInterval(function () {
             // Local Storage
@@ -373,33 +377,54 @@
             document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
         }, 1000);*/
         
-        function saveToLocalStorage() {
-            var value = recordName;
-            window.localStorage.setItem("testKey", value);
-        }
-        
-        function saveCookie() {
-            var value = document.getElementById("cookieInput").value;
-            var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
-            document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
-            document.getElementById("cookieInput").value = "";
-        }
-        
-        function clearCache() {
-            gonative.webview.clearCache();
-        }
-        
-        function clearCookies() {
-            gonative.webview.clearCookies();
-        }
+            function saveNameToLocalStorage() {
+                var value = recordName;
+                window.localStorage.setItem("nameKey", value);
+            }
 
+            function saveLogToLocalStorage() {
+                var value = buttonLogs;
+                window.localStorage.setItem("logKey", JSON.stringify(value));
+            }
 
+            function saveTodosToLocalStorage(todos,todoListIndex) {
+                window.localStorage.setItem("todosKey", JSON.stringify(todos));
+                //console.log(window.localStorage.getItem("todosKey"));
+                window.localStorage.setItem("todosIndexKey", JSON.stringify(todoListIndex));
+            }
+
+            function saveClickToLocalStorage() {
+                window.localStorage.setItem("clickKey", JSON.stringify(random_buttonClicked));
+            }
+            
+            function saveCookie() {
+                var value = document.getElementById("cookieInput").value;
+                var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
+                document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
+                document.getElementById("cookieInput").value = "";
+            }
+            
+            function clearCache() {
+                gonative.webview.clearCache();
+            }
+            
+            function clearCookies() {
+                gonative.webview.clearCookies();
+            }
 
             ///////////////
             function loadintialTodoList(){
+                console.log(todoListIndex);
                 if (!todoListIndex) {
-                    const { todos } = getRandomTodoList();
-                    renderTodoList(todos);
+                    if (JSON.parse(window.localStorage.getItem("todosKey"))) {
+                        var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                        renderTodoList(storedTodos);
+                        todoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
+                        //console.log(todoListIndex)
+                    } else {
+                        const { todos } = getRandomTodoList();
+                        renderTodoList(todos);
+                    }
                 }
             }
 
@@ -411,10 +436,12 @@
                     } while (randomIndex == ex_index);
                 }
                 todoListIndex = randomIndex;
-                return { index: randomIndex + 1, todos: todoLists[randomIndex] };
+                console.log(todoListIndex);
+                return { index: randomIndex + 1, todos: todoLists[randomIndex].map(todo => ({ text: todo, completed: false })) };
             }
 
             function renderTodoList(todos) {
+                saveTodosToLocalStorage(todos,todoListIndex);
                 const todoListContainer = document.getElementById("todoListContainer");
                 todoListContainer.innerHTML = "";
 
@@ -429,8 +456,10 @@
                     checkbox.type = "checkbox";
                     checkbox.id = `todo-${todoIndex}`;
                     checkbox.className = "todo-checkbox";
+                    checkbox.checked = todo.completed;
                     checkbox.addEventListener("change", function() {
                         const label = todoItem.querySelector('.todo-label');
+                        
                         if (checkbox.checked) {
                             label.style.textDecoration = "line-through";
                             label.style.color = "gray";
@@ -438,6 +467,10 @@
                             const smiley = document.createElement("span");
                             smiley.className = "smiley";
                             label.appendChild(smiley);
+                            
+                            todos[todoIndex].completed = true;
+                            saveTodosToLocalStorage(todos,todoListIndex);
+                            //console.log(todos[todoIndex].completed)
                         } else {
                             label.style.textDecoration = "none";
                             label.style.color = "black";
@@ -446,7 +479,11 @@
                             if (smiley) {
                                 label.removeChild(smiley);
                             }
+                            todos[todoIndex].completed = false;
+                            saveTodosToLocalStorage(todos,todoListIndex);
                         }
+                        todos[todoIndex].completed = checkbox.checked;
+                        saveTodosToLocalStorage(todos,todoListIndex);
 
                         const allChecked = document.querySelectorAll('.todo-checkbox:checked').length === todos.length;
                         if (allChecked) {
@@ -458,8 +495,16 @@
 
                     const label = document.createElement("label");
                     label.htmlFor = `todo-${todoIndex}`;
-                    label.textContent = todo;
+                    label.textContent = todo.text;
                     label.className = "todo-label";
+                    if (todo.completed) {
+                        label.style.textDecoration = "line-through";
+                        label.style.color = "gray";
+
+                        const smiley = document.createElement("span");
+                        smiley.className = "smiley";
+                        label.appendChild(smiley);
+                    }
 
                     todoItem.appendChild(checkbox);
                     todoItem.appendChild(label);
@@ -468,16 +513,19 @@
 
                 todoListContainer.appendChild(todoList);
             }
+        
+        function changeRandomButtonColor(){
+                    random_buttonClicked = true;
+                    randomTodoListButton.disabled = true;
+                    randomTodoListButton.classList.add("disabled");
+                    saveClickToLocalStorage();
+        }
 
         randomTodoListButton.addEventListener("click", function() {
             console.log("Button clicked!");
             if (!random_buttonClicked) {
                 if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
-                    buttonClicked = true;
-                    const { todos } = getRandomTodoList(todoListIndex);
-                    renderTodoList(todos);
-                    randomTodoListButton.disabled = true;
-                    randomTodoListButton.classList.add("disabled");
+                    changeRandomButtonColor();
                 }
             } else {
                 alert("You have already changed the to do list. You cannot perform this action again.");
@@ -501,6 +549,9 @@
                 button.style.backgroundColor = '';
             } else if (pageId === 'page3') {
                 loadintialTodoList();
+                if(random_buttonClicked){
+                    changeRandomButtonColor();
+                }
             }
         }
         
@@ -523,6 +574,7 @@
             });
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
+            saveLogToLocalStorage();
         }
         
         function toggleButton() {
@@ -895,14 +947,6 @@
             });
         }
 
-        window.onload = function() {
-            showPage('page1');
-            alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
-            var storedValue = window.localStorage.getItem("testKey");
-            var inputValue = storedValue ? storedValue : "";
-            document.getElementById("nameInput").value = inputValue;
-        };
-
         document.getElementById("button1").addEventListener("click", function() {
             handleButtonClick(1, "Indoor", "images/indoor.png");
         });
@@ -940,7 +984,7 @@
 
         document.getElementById("nameInput").addEventListener("change", function() {
             recordName = this.value;
-            saveToLocalStorage();
+            saveNameToLocalStorage();
         });
 
         updateTime(); // Initial call to set time immediately
