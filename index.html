@@ -30,6 +30,14 @@
             font-size: 45px;
         }
 
+        h2 {
+            color: #000000;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600; 
+            font-size: 35px;
+        }
+
         label {
             font-weight: bold;
             color: #000000;
@@ -157,7 +165,7 @@
         }
 
         .navbar button:hover {
-            background-color: #ffffff; 
+            background-color: #252525d8; 
             color: #000;
         }
 
@@ -166,7 +174,7 @@
             justify-content: space-around;
             background-color: #000; 
             color: #fff; 
-            height: 35px;
+            height: 45px;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -293,7 +301,7 @@
     </div>
 
     <div id="page2" class="content">
-        <h1>Log Table<img src="images/log.svg" class="icon" alt="Log Icon"></h1>
+        <h2>Log Table</h2>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
             <button id="deleteRecordButton" onclick="toggleButton_delete()">Delete record</button>
@@ -302,15 +310,15 @@
     </div>
 
     <div id="page3" class="content">
-        <h1>Embark on Your Data Journey!<img src="images/journey.svg" class="icon" alt="Log Icon"></h1>
+        <h2>Embark on Your Data Journey!</h2>
         <button id="randomTodoListButton">Change Scenario</button>
         <div id="todoListContainer"></div>
     </div>
     
     <div class="navbar">
-        <button onclick="showPage('page3')">Scenario</button>
-        <button onclick="showPage('page1')">Home</button>
-        <button onclick="showPage('page2')">Log Page</button>
+        <button onclick="showPage('page3')"><img src="images/journey2.svg" class="icon" alt="Log Icon"></button>
+        <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon"></button>
+        <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon"></button>
     </div>
 
     <script>
