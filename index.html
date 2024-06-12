@@ -165,7 +165,7 @@
         }
 
         .navbar button:hover {
-            background-color: #252525d8; 
+            background-color: #2b2b2bd8; 
             color: #000;
         }
 
@@ -280,11 +280,50 @@
             vertical-align: middle;
         }
 
+        #exportContainer {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #exportIcon {
+            width: 24px; 
+            height: 24px; 
+            margin-right: 5px; 
+        }
+
+        #exportText {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500; 
+            font-size: 15px;
+            color: #000;
+        }
+
+        #restartContainer {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
 </head>
 <body>
     <div id="page1" class="content active">
+        <div id="exportContainer" onclick="popInformation()">
+            <img id="exportIcon" src="images/information.svg" alt="Export Icon">
+            <span id="exportText">About</span>
+        </div>
+        <div id="restartContainer" onclick="restart()">
+            <img id="exportIcon" src="images/restart.svg" alt="Export Icon">
+            <span id="exportText">Restart</span>
+        </div>
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
         <input type="text" id="nameInput">
@@ -297,10 +336,14 @@
         <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
         <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
         <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
-        <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button>
+        <!-- <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button> -->
     </div>
 
     <div id="page2" class="content">
+        <div id="exportContainer" onclick="exportLogs()">
+            <img id="exportIcon" src="images/export2.svg" alt="Export Icon">
+            <span id="exportText">Export</span>
+        </div>
         <h2>Log Table</h2>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
@@ -370,7 +413,9 @@
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                 
-                alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+                setTimeout(()=>{
+                                alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+                            },300);
             };
 
                 
@@ -404,31 +449,36 @@
             function saveClickToLocalStorage() {
                 window.localStorage.setItem("clickKey", JSON.stringify(random_buttonClicked));
             }
-            
-            function saveCookie() {
-                var value = document.getElementById("cookieInput").value;
-                var expireTime = new Date(Date.now() + 1000 * 60 * 60 * 24).toUTCString(); // Set expiration time to 24 hours from now
-                document.cookie = `testKey=${value}; path=/; expires=${expireTime}`;
-                document.getElementById("cookieInput").value = "";
+
+            function restart(){
+                if(confirm("Do you decide to restart the experiment? If do so, you will LOSE ALL DATA.")){
+                    if(confirm("Again :) Are you sure to delete all data logged?")){
+                        localStorage.removeItem("nameKey");
+                        localStorage.removeItem("logKey");
+                        localStorage.removeItem("todosKey");
+                        localStorage.removeItem("todosIndexKey");
+                        localStorage.removeItem("clickKey");
+                        
+                        setTimeout(()=>{
+                            alert("You can restart after re-open 'Label Logger'!");
+                        },500);
+                    }
+                }
             }
-            
-            function clearCache() {
-                gonative.webview.clearCache();
-            }
-            
-            function clearCookies() {
-                gonative.webview.clearCookies();
+
+            function popInformation(){
+
             }
 
             ///////////////
             function loadintialTodoList(){
-                console.log(todoListIndex);
+                //console.log(todoListIndex);
                 if (!todoListIndex) {
                     if (JSON.parse(window.localStorage.getItem("todosKey"))) {
                         var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                         renderTodoList(storedTodos);
                         todoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
-                        //console.log(todoListIndex)
+                        console.log(todoListIndex)
                     } else {
                         const { todos } = getRandomTodoList();
                         renderTodoList(todos);
@@ -497,7 +547,7 @@
                         if (allChecked) {
                             setTimeout(()=>{
                                 alert("Congratulation! You completed the data collection, thank you very much! Now please export the log and send to the aassigned mail address.");
-                            },150);
+                            },300);
                         }
                     });
 
@@ -864,6 +914,7 @@
                 return;
             }
             if (!todoListIndex) {
+                console.log(todoListIndex)
                 alert("Please have a look at your scenario before logging!");
                 return;
             }
@@ -971,9 +1022,9 @@
             handleButtonClick(4, "Not sure", "images/not_sure.png");
         });
 
-        document.getElementById("exportButton").addEventListener("click", function() {
+        /*document.getElementById("exportButton").addEventListener("click", function() {
             exportLogs();
-        });
+        });*/
 
         document.getElementById("cancelButton").addEventListener("click", function() {
             if (selectedButton === 5 || selectedButton === null) {
