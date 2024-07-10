@@ -1201,21 +1201,9 @@ If you have any problem, do not hesitate to contact me! :)
                 alert("Please enter your name before exporting!");
                 return;
             }
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
-
-            buttonLogs.forEach(function(log) {
-                csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
-            });
-
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "label_logs.csv");
-            document.body.appendChild(link);
-
-            link.click();
-            document.body.removeChild(link);
+            
+            const blobUrl = createCsvBlob();
+            gonative.share.downloadFile({url: blobUrl});
         }
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
