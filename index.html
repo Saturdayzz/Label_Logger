@@ -354,6 +354,10 @@
             color: #ffffff;
         }
 
+        .new-record-row {
+            background-color: rgb(213, 230, 250);
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
 </head>
@@ -367,9 +371,14 @@
         <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
         <div class="popup" id="popup">
             <button class="close-btn" onclick="closePopup()">×</button>
-            <h2>Information</h2>
-            <p>This is a small popup window containing some text and an image.</p>
-            <img src="path/to/your/image.jpg" alt="Example Image" style="width: 100%; height: auto;">
+            <h2>Tutorial</h2>
+            <p>Welcome to this data collection!<br><br>
+                1. First, please enter your name (you don't have to use your real name).<br>
+                2. Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.<br>
+                3. Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and click again to stop timing. When switching scenarios, you can directly click the corresponding button.<br>
+                4. When the data collection is complete, click the export button.</p>
+
+            
         </div>
 
         <div id="restartContainer" onclick="restart()">
@@ -423,7 +432,7 @@
             var timeDisplay = document.getElementById("timeDisplay");
             var statusImage = document.getElementById("statusImage");
             var buttonLogs = [
-            { name: "John Doe", buttonId: "1", buttonLabel: "indoor", date:"15/04/2024",time :"8:31:57",timeZone: "GMT+2", note: "Note 1" }
+            { name: "John Doe", buttonId: "1", buttonLabel: "indoor", date:"15/04/2024",time :"8:31:57",timeZone: "GMT+2", note: "Note 1", isNewRecord: false }
             ];
             var buttonLabels = {
                 "1": "indoor",
@@ -434,15 +443,21 @@
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
-                ["1.Start outdoors in the courtyard", "2.Enter the teaching building and walk into a room staying for >8 minutes", "3.Sit by the window for >8 minutes", "4.Walk to the garden between buildings and stay for >8 minutes", "5.Walk to the library staying for 8 minutes", "6.Walk in Irchel Park for 10 minutes"],
-                ["1.Depart from the central train station", "2.Walk through Bahnhofstrasse to Globus", "3 Browse at least four stores in the mall satying > 8 minutes in each", "4. Stay near the windows for >8 minutes before leaving.", "5.Leave Globus and go to Coop‘s supermarket floor staying 8 minutes"],
-                ["1.Start at center campus", "2.Saty at lounge area for >8minutes", "3.Entering a classroom and staying >8minutes", "4.Leave the building and walk to take Polyban", "5.Have a walk in the alley", "6.Have a walk along the Limmatquai"],
-                ["1.Start at outside garden", "2.Stay there for >8minutes", "3.Saty inside the house>8 minutes", "4.Stay under the eaves for 8 minutes", "5. Walk to the community center and satying for 8 minutes","*6.Walk to nearby gym and satying for 8 minutes"]
+                { title: "Irchel Campus Scenario 1", items: ["1.Start outdoors in the courtyard", "2.Enter the teaching building and walk into a room staying for >8 minutes", "3.Sit by the window for 5-8 minutes", "4.Walk to the garden between buildings and stay for 5-8 minutes", "5.Walk to the library staying for 5-8 minutes", "6.Walk in Irchel Park for 5-8 minutes"] },
+                { title: "Train Station Scenario", items: ["1.Depart from the central train station", "2.Walk through Bahnhofstrasse to Globus", "3 Browse at least four stores in the mall satying 5-8 minutes in each", "4. Stay near the windows for 5-8 minutes before leaving.", "5.Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes"] },
+                { title: "Central Campus Scenario", items: ["1.Start at center campus", "2.Saty at lounge area for >8minutes", "3.Entering a classroom and staying >8minutes", "4.Leave the building and walk to take Polyban", "5.Have a walk in the alley", "6.Have a walk along the Limmatquai"] },
+                { title: "Garden Scenario", items: ["1.Start at outside garden", "2.Stay there for 5-8 minutes", "3.Saty inside the house>8 minutes", "4.Stay under the eaves for 5-8 minutes", "5. Walk to the community center and satying for 5-8 minutes","*6.Walk to nearby gym and satying for 5-8 minutes"] },
+                { title: "Irchel Campus Scenario 2", items: ["1.Start at Irchel campus", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes", "3.Walk into the cafeteria and stay for 5-8 minutes", "4.Walk to 'Lichthof' and sit there for 5-8 minutes", "5.Get into your office room and stay for 5-8 minutes"] },
+                { title: "Central Scenario", items: ["1.Start at a nearby open area", "2.Stay under the station's glass roof for 5 minutes", "3.Take tram 9 to Bellevue", "4. Get off the tram and walk to train station Stadelhofen", "5.Hop on a train to Zurich HB (sit on the lower floor)", "6.Get off the train and stay on the ground floor of Zurich HB"] },
+                { title: "Tram 7 Scenario", items: ["1.Start from Milchbuck", "2.Take tram 7 to Schwamendingerplatz", "3.Get off the tram and enter Coop", "4.Stay inside for 5-8 minutes", "5.Enter Migros and stay inside for 5-8 minutes", "6.Leave Schwamendingerplatz by tram"] },
+                { title: "City Central Shopping Scenario", items: ["1.Start at Zurich Hb", "2.Walk along Bahnhofstrasse towards Rennweg", "3.Enter 2-3 shops on your way (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4.Board the tram at Rennweg till Bürkliplatz", "5.Have a 5-minute walk along the lake"] }
             ];
+
             const todoListContainer = document.getElementById("todoListContainer");
             const randomTodoListButton = document.getElementById("randomTodoListButton");
             let random_buttonClicked = false;
             let todoListIndex = null;
+            let todoListTitle = null;
 
             window.onload = function() {
                 showPage('page1');
@@ -455,9 +470,10 @@
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
 
-                var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : random_buttonClicked;
+                var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : false;
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
                 
                 setTimeout(()=>{
                                 alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
@@ -486,10 +502,11 @@
                 window.localStorage.setItem("logKey", JSON.stringify(value));
             }
 
-            function saveTodosToLocalStorage(todos,todoListIndex) {
+            function saveTodosToLocalStorage(todos, title, todoListIndex) {
                 window.localStorage.setItem("todosKey", JSON.stringify(todos));
                 //console.log(window.localStorage.getItem("todosKey"));
                 window.localStorage.setItem("todosIndexKey", JSON.stringify(todoListIndex));
+                window.localStorage.setItem("todosTitleKey", JSON.stringify(title));
             }
 
             function saveClickToLocalStorage() {
@@ -502,6 +519,7 @@
                         localStorage.removeItem("nameKey");
                         localStorage.removeItem("logKey");
                         localStorage.removeItem("todosKey");
+                        localStorage.removeItem("todosTitleKey")
                         localStorage.removeItem("todosIndexKey");
                         localStorage.removeItem("clickKey");
                         
@@ -524,21 +542,127 @@
 
             ///////////////
             function loadintialTodoList(){
-                //console.log(todoListIndex);
-                if (!todoListIndex) {
-                    if (JSON.parse(window.localStorage.getItem("todosKey"))) {
-                        var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
-                        renderTodoList(storedTodos);
-                        todoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
-                        console.log(todoListIndex)
-                    } else {
-                        const { todos } = getRandomTodoList();
-                        renderTodoList(todos);
+                storedIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
+                todoListIndex = storedIndex? storedIndex:null;
+                console.log(todoListIndex);
+                if(todoListIndex){
+                    var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                    var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+                    renderTodoList(storedTodos,storedTodosTile);
+                    todoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
+                }else {
+                        const { todos,title } = getRandomTodoList();
+                        renderTodoList(todos,title);
                     }
-                }
             }
 
-            function getRandomTodoList(ex_index=null) {
+        ///////
+        function getRandomTodoList(ex_index=null) {
+            let randomIndex = Math.floor(Math.random() * todoLists.length);
+            if (ex_index != null) {
+                do {
+                    randomIndex = Math.floor(Math.random() * todoLists.length);
+                } while (randomIndex == ex_index);
+            }
+            todoListIndex = randomIndex;
+            return { index: randomIndex + 1, title: todoLists[randomIndex].title, todos: todoLists[randomIndex].items.map(todo => ({ text: todo, completed: false })) };
+        }
+
+        function renderTodoList(todos, title) {
+            saveTodosToLocalStorage(todos, title, todoListIndex);
+            const todoListContainer = document.getElementById("todoListContainer");
+            todoListContainer.innerHTML = "";
+
+            const todoListTitle = document.createElement("h3");
+            todoListTitle.textContent = title;
+            todoListContainer.appendChild(todoListTitle);
+
+            const todoList = document.createElement("div");
+            todoList.className = "todo-list";
+
+            todos.forEach((todo, todoIndex) => {
+                const todoItem = document.createElement("div");
+                todoItem.className = "todo-list-item";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = `todo-${todoIndex}`;
+                checkbox.className = "todo-checkbox";
+                checkbox.checked = todo.completed;
+                checkbox.addEventListener("change", function() {
+                    const label = todoItem.querySelector('.todo-label');
+
+                    if (checkbox.checked) {
+                        label.style.textDecoration = "line-through";
+                        label.style.color = "gray";
+
+                        const smiley = document.createElement("span");
+                        smiley.className = "smiley";
+                        label.appendChild(smiley);
+
+                        todos[todoIndex].completed = true;
+                        saveTodosToLocalStorage(todos, title, todoListIndex);
+                    } else {
+                        label.style.textDecoration = "none";
+                        label.style.color = "black";
+
+                        const smiley = label.querySelector('.smiley');
+                        if (smiley) {
+                            label.removeChild(smiley);
+                        }
+                        todos[todoIndex].completed = false;
+                        saveTodosToLocalStorage(todos, title, todoListIndex);
+                    }
+                    todos[todoIndex].completed = checkbox.checked;
+                    saveTodosToLocalStorage(todos, title, todoListIndex);
+
+                    const allChecked = document.querySelectorAll('.todo-checkbox:checked').length === todos.length;
+                    if (allChecked) {
+                        setTimeout(() => {
+                            alert("Congratulation! You completed the data collection, thank you very much! Now please export the log and send to the aassigned mail address.");
+                        }, 300);
+                    }
+                });
+
+                const label = document.createElement("label");
+                label.htmlFor = `todo-${todoIndex}`;
+                label.textContent = todo.text;
+                label.className = "todo-label";
+                if (todo.completed) {
+                    label.style.textDecoration = "line-through";
+                    label.style.color = "gray";
+
+                    const smiley = document.createElement("span");
+                    smiley.className = "smiley";
+                    label.appendChild(smiley);
+                }
+
+                todoItem.appendChild(checkbox);
+                todoItem.appendChild(label);
+                todoList.appendChild(todoItem);
+            });
+
+            todoListContainer.appendChild(todoList);
+        }
+
+        randomTodoListButton.addEventListener("click", function() {
+            console.log("Button clicked!");
+            if (!random_buttonClicked) {
+                if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
+                    changeRandomButtonColor();
+                    const { todos, title } = getRandomTodoList(todoListIndex);
+                    renderTodoList(todos, title);
+                }
+            } else {
+                alert("You have already changed the to do list. You cannot perform this action again.");
+            }
+        });
+
+
+
+        ///////
+
+            /*function getRandomTodoList(ex_index=null) {
                 let randomIndex = Math.floor(Math.random() * todoLists.length);
                 if (ex_index!=null){
                     do {
@@ -546,7 +670,7 @@
                     } while (randomIndex == ex_index);
                 }
                 todoListIndex = randomIndex;
-                console.log(todoListIndex);
+                //console.log(todoListIndex);
                 return { index: randomIndex + 1, todos: todoLists[randomIndex].map(todo => ({ text: todo, completed: false })) };
             }
 
@@ -622,7 +746,7 @@
                 });
 
                 todoListContainer.appendChild(todoList);
-            }
+            } */
         
         function changeRandomButtonColor(){
                     random_buttonClicked = true;
@@ -631,16 +755,18 @@
                     saveClickToLocalStorage();
         }
 
-        randomTodoListButton.addEventListener("click", function() {
+        /*randomTodoListButton.addEventListener("click", function() {
             console.log("Button clicked!");
             if (!random_buttonClicked) {
                 if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
                     changeRandomButtonColor();
+                    const { todos } = getRandomTodoList(todoListIndex);
+                    renderTodoList(todos);
                 }
             } else {
                 alert("You have already changed the to do list. You cannot perform this action again.");
             }
-        });
+        });*/
 
         
     //});
@@ -676,10 +802,28 @@
             document.getElementById('logTable').innerHTML = tableContent;
         }*/
 
+        function setSortDateTime(date, time) {
+            const [month, day, year] = date.split('/');
+            return new Date(`${year}-${month}-${day}T${time}`);
+        }
+
         function renderLogs() {
+            buttonLogs.sort((a, b) => {
+                const dateTimeA = setSortDateTime(a.date, a.time);
+                const dateTimeB = setSortDateTime(b.date, b.time);
+                return dateTimeA - dateTimeB;
+            });
+
             var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
-                var rowClass = index === 0 ? "class='example-row'" : "";
+                //var rowClass = index === 0 ? "class='example-row'" : "";
+                //var rowClass = log.isNewRecord ? "class='new-record-row'" : "";
+                var rowClass = "";
+                if (index === 0) {
+                    rowClass = "class='example-row'";
+                } else if (log.isNewRecord) {
+                    rowClass = "class='new-record-row'";
+                }
                 tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
             });
             tableContent += "</table>";
@@ -727,13 +871,13 @@
             var buttonLabel = buttonLabels[buttonId];
             var timezone = document.getElementById('timezoneInput').value;
 
-            var date = document.getElementById('dateInput').value;
+            var date = setReocrdDate(document.getElementById('dateInput').value);
             var time = document.getElementById('timeInput').value;
             var note = document.getElementById('noteInput').value;
 
-            var date2 = document.getElementById('dateInput2').value;
-            var time2 = document.getElementById('timeInput2').value;
-            var note2 = document.getElementById('noteInput2').textContent;
+            //var date2 = document.getElementById('dateInput2').value;
+            //var time2 = document.getElementById('timeInput2').value;
+            //var note2 = document.getElementById('noteInput2').textContent;
             //console.log(`time: ${time}, name: ${name}, buttonId: ${buttonId}`);
 
             if (!name || !buttonId || !time) {
@@ -746,17 +890,23 @@
 
                 return;
             }
-            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel,date:date, time: time,timeZone:timezone,note: note });
-            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, date:date2, time: time2,timeZone:timezone, note: note2 });
+            buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel,date:date, time: time,timeZone:timezone,note: note,  isNewRecord: true  });
+            //buttonLogs.push({ name: name, buttonId: buttonId, buttonLabel: buttonLabel, date:date2, time: time2,timeZone:timezone, note: note2 });
             renderLogs();
         }
 
-        function setDefaultDate(){
-            var now = new Date();
+        function setDefaultDate(now=new Date()){
+            //var now = new Date();
             var year = now.getFullYear();
             var month = String(now.getMonth() + 1).padStart(2, '0'); 
             var day = String(now.getDate()).padStart(2, '0'); 
             var date = `${year}-${month}-${day}`;
+            return date;
+        }
+
+        function setReocrdDate(defaultDate){
+            var date = new Date(defaultDate)
+            date = date.toLocaleDateString('en-GB')
             return date;
         }
 
@@ -770,7 +920,7 @@
             //<td><input type='text' id='nameInput2' ${nameInputContent}></td>
             var currentDate = setDefaultDate();
             tableContent += `
-                <tr>
+                <tr class='new-record-row'>
                     <td><span id='nameInput2'>${recordName}</span></td>
                     <td>
                         <select id='buttonIdInput'>
@@ -788,7 +938,7 @@
                     <td><input type='text' id='noteInput' placeholder='Note'></td>
                 </tr>
             `;
-            tableContent += `
+            /*tableContent += `
                 <tr>
                     <td><span id='nameInput2'>${recordName}</span></td>
                     <td>
@@ -806,7 +956,7 @@
                     <td><input type='text' id='timezoneInput2' value='GMT+2'></td>
                     <td><span id='noteInput2'>Stop</span></td>
                 </tr>
-            `;
+            `;*/
             
             tableContent += "</table>";
             document.getElementById('logTable').innerHTML = tableContent;
@@ -816,26 +966,16 @@
                 var selectedButtonId = this.value;
                 var buttonLabel = buttonLabels[selectedButtonId];
                 document.getElementById('buttonLabelOutput').textContent = buttonLabel;
-                document.getElementById('buttonIdInput2').value = selectedButtonId;
-                document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
+                //document.getElementById('buttonIdInput2').value = selectedButtonId;
+                //document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
             });
-            document.getElementById('buttonIdInput2').addEventListener('change', function() {
+            /*document.getElementById('buttonIdInput2').addEventListener('change', function() {
                 var selectedButtonId = this.value;
                 var buttonLabel = buttonLabels[selectedButtonId];
                 document.getElementById('buttonLabelOutput').textContent = buttonLabel;
                 document.getElementById('buttonIdInput').value = selectedButtonId;
                 document.getElementById('buttonLabelOutput2').textContent = buttonLabel;
             });
-            /*document.getElementById('timeInput').addEventListener('change', function() {
-                var dateTime = this.value;
-                var timeInput3 = document.getElementById('timeInput2');
-
-                if (dateTime) {
-                    var datePart = dateTime.split('T')[0];
-                    var timePart = timeInput3.value.split('T')[1] || "00:00"; 
-                    timeInput3.value = datePart + 'T' + timePart;
-                }
-            });*/
             document.getElementById('timezoneInput').addEventListener('input', function() {
                 var timezone = this.value;
                 document.getElementById('timezoneInput2').value = timezone;
@@ -843,7 +983,7 @@
             document.getElementById('timezoneInput2').addEventListener('input', function() {
                 var timezone = this.value;
                 document.getElementById('timezoneInput').value = timezone;
-            });
+            });*/
 
         }
 
@@ -882,9 +1022,7 @@
             rows.forEach(function(row, index) {
                 if (index > 1) {
                     row.addEventListener('click', function() {
-                        rows.forEach(function(r) {
-                            r.classList.remove('selected-row');
-                        });
+                        this.classList = '';
                         this.classList.add('selected-row');
                         var rowIndex = this.getAttribute('data-index');
                         //console.log("rowIndex:"+rowIndex);
@@ -936,7 +1074,7 @@
         function logButtonClick(buttonId, note) {
             var time = getCurrentTime();
             var buttonLabel = buttonLabels[buttonId] || "unknown";
-            buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note });
+            buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note, isNewRecord: false });
         }
 
         function createCsvBlob() {
