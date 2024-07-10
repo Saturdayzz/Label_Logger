@@ -372,13 +372,7 @@
         <div class="popup" id="popup">
             <button class="close-btn" onclick="closePopup()">×</button>
             <h2>Tutorial</h2>
-            <p>Welcome to this data collection!<br><br>
-                1. First, please enter your name (you don't have to use your real name).<br>
-                2. Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.<br>
-                3. Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and click again to stop timing. When switching scenarios, you can directly click the corresponding button.<br>
-                4. When the data collection is complete, click the export button.</p>
-
-            
+            <div id="markdown-content"></div>
         </div>
 
         <div id="restartContainer" onclick="restart()">
@@ -424,7 +418,7 @@
         <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon"></button>
         <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon"></button>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
             var recordName;
             var selectedButton = null;
@@ -476,7 +470,7 @@
                 var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
                 
                 setTimeout(()=>{
-                                alert("Welcome to this experiment!\n\nIndoor: Activities conducted inside a building or enclosed space.\n\nOutdoor: Activities conducted outside in the open air.\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.");
+                                alert("Welcome to participate in my research!\n\nIf you are new here, please have a look at 'About' (^_−). \nAfter completing data collection for a scenario, please export the log and send to chenxi.jiang@uzh.ch. \n\nEnjoy your journey here!");
                             },300);
             };
 
@@ -533,6 +527,40 @@
             function popInformation() {
                 document.getElementById('popupOverlay').style.display = 'block';
                 document.getElementById('popup').style.display = 'block';
+                const markdown = `
+### Welcome to MOASIS Data Collection
+
+---
+
+Thank you for participating in my research! This research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data. This will help to improve indoor-outdoor activity detection for the MOASIS project and have a better understanding of the daily movements of elderly individuals.
+
+In this resarch, I classify the environment to three different types, the definitions are as follows.
+
+**Indoor**: Activities conducted inside a building or enclosed space.
+
+**Outdoor**: Activities conducted outside in the open air.
+
+**Semi-Indoor**: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.
+
+
+---
+
+### Tutorial
+Here is a simple introduction. For a more detailed tutorial, please see the tutorial sheet.
+
+- First, please enter your name (you don't have to use your real name).
+- Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.
+- Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and switch buttons when you move into a different environment.
+- Clicking the same button will stop the current record. You can also cancel the record if it is incorrect. The 'Restart' button clears all cache and data.
+- When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment to 'chenxi.jiang@uzh.ch'.
+
+If you have any problem, do not hesitate to contact me! :)
+
+---
+
+**Thank you for your valuable contribution!**
+            `;
+            document.getElementById("markdown-content").innerHTML = marked.parse(markdown);
             }
 
             function closePopup() {
