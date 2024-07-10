@@ -11,6 +11,7 @@
             background-color: #ffffff;
             margin: 0;
             padding: 20px;
+            margin-bottom: 60px;
         }
 
         .content {
@@ -156,33 +157,43 @@
             margin: 0 auto;
         }
 
-        .navbar button {
-            padding: 0; 
-            margin: 0;
-            border: none;
-            border-radius: 5px;
-            background: none; 
-            color: inherit;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .navbar button:hover {
-            background-color: #2b2b2bd8; 
-            color: #000;
-        }
-
         .navbar {
             display: flex;
             justify-content: space-around;
-            background-color: #000; 
-            color: #fff; 
+            background-color: #000;
+            color: #fff;
             height: 45px;
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 1000;
+        }
+
+        .navbar button {
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-radius: 5px;
+            background: none;
+            color: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar button:hover {
+            background-color: #2b2b2bd8;
+            color: #000;
+        }
+
+        .navbar img.icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
         }
 
         .scenario-item-container {
@@ -445,9 +456,9 @@
     </div>
     
     <div class="navbar">
-        <button onclick="showPage('page3')"><img src="images/journey2.svg" class="icon" alt="Log Icon"></button>
-        <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon"></button>
-        <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon"></button>
+        <button onclick="showPage('page3')"><img src="images/journey2.svg" class="icon" alt="Log Icon">scenario</button>
+        <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon">home</button>
+        <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon">log</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
