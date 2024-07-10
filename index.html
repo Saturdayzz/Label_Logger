@@ -930,7 +930,7 @@ If you have any problem, do not hesitate to contact me! :)
                 return dateTimeA - dateTimeB;
             });
 
-            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
+            var tableContent = "<div class='table-container'><table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 //var rowClass = index === 0 ? "class='example-row'" : "";
                 //var rowClass = log.isNewRecord ? "class='new-record-row'" : "";
@@ -942,7 +942,7 @@ If you have any problem, do not hesitate to contact me! :)
                 }
                 tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
             });
-            tableContent += "</table>";
+            tableContent += "</table></div>";
             document.getElementById('logTable').innerHTML = tableContent;
             saveLogToLocalStorage();
         }
