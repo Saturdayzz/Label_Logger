@@ -97,6 +97,10 @@
             background-color: #00b318;
         }
 
+        button#createScenarioButton {
+            background-color: #3591d7;
+        }
+
         #exportButton {
             background-color: #6c757d;
         }
@@ -181,6 +185,10 @@
             right: 0;
         }
 
+        .scenario-item-container {
+            margin-bottom: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -231,6 +239,21 @@
             color: #999999;
             cursor: not-allowed; 
         }
+
+        #buttonContainer_small {
+            display: flex;
+            gap: 10px;
+        }
+
+        #buttonContainer_small button {
+            width: 150px;
+            padding: 5px; 
+            flex: none;
+            background-color: #e1e0e0;
+            color: #201f1f;
+            font-size: 15px;
+        }
+
         #buttonContainer {
             display: flex;
             gap: 10px;
@@ -415,7 +438,11 @@
 
     <div id="page3" class="content">
         <h2>Embark on Your Data Journey!</h2>
-        <button id="randomTodoListButton">Change Scenario</button>
+        <div id="buttonContainer">
+            <button id="randomTodoListButton">Change Scenario</button>
+            <button id="createScenarioButton" onclick="createScenario()">Create a Scenario</button>
+        </div>
+        
         <div id="todoListContainer"></div>
     </div>
     
@@ -658,7 +685,53 @@
             }
         });
 
+        function createScenario(){
+            const todoListContainer = document.getElementById("todoListContainer");
+            todoListContainer.innerHTML = "";
 
+            const titleInput = document.createElement("input");
+            titleInput.id = "scenarioTitle";
+            titleInput.className = "scenario-item-container";
+            titleInput.placeholder = "Scenario Title";
+            todoListContainer.appendChild(titleInput);
+
+            const itemsContainer = document.createElement("div");
+            itemsContainer.id = "itemsContainer";
+            todoListContainer.appendChild(itemsContainer);
+
+            const addItemButton = document.createElement("button");
+            addItemButton.textContent = "Add Item";
+            addItemButton.addEventListener("click", () => {
+                const itemContainer = document.createElement("div");
+                itemContainer.className = "scenario-item-container";
+                const itemInput = document.createElement("input");
+                itemInput.className = "scenario-item";
+                itemInput.placeholder = "Scenario Item";
+                itemContainer.appendChild(itemInput);
+                itemsContainer.appendChild(itemContainer);
+            });
+
+            const saveScenarioButton = document.createElement("button");
+            saveScenarioButton.textContent = "Save Scenario";
+            saveScenarioButton.addEventListener("click", () => {
+                const title = document.getElementById("scenarioTitle").value;
+                const itemInputs = document.querySelectorAll(".scenario-item");
+                todos = Array.from(itemInputs)
+                    .map(input => input.value.trim())
+                    .filter(value => value !== "")
+                    .map(value => ({
+                        text: value,
+                        completed: false
+                }));
+                renderTodoList(todos, title);
+            });
+
+            const buttonContainer = document.createElement("div");
+            buttonContainer.id = "buttonContainer_small";
+            todoListContainer.appendChild(buttonContainer);
+            buttonContainer.appendChild(addItemButton);
+            buttonContainer.appendChild(saveScenarioButton);
+        }
 
         ///////
 
@@ -1022,6 +1095,7 @@
             rows.forEach(function(row, index) {
                 if (index > 1) {
                     row.addEventListener('click', function() {
+                        raw_classlist = Array.from(this.classList); //obtain original classlist name (may be more than one class)
                         this.classList = '';
                         this.classList.add('selected-row');
                         var rowIndex = this.getAttribute('data-index');
@@ -1033,6 +1107,8 @@
                                 listenRecordClick();
                             }else{
                                 this.classList.remove('selected-row');
+                                console.log(raw_classlist)
+                                this.classList.add(raw_classlist);
                             }
                         }, 150);
                     });
