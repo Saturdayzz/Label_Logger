@@ -449,7 +449,7 @@
         <h2>Embark on Your Data Journey!</h2>
         <div id="buttonContainer">
             <button id="randomTodoListButton">Change Scenario</button>
-            <button id="createScenarioButton" onclick="createScenario()">Create a Scenario</button>
+            <button id="createScenarioButton" onclick="toggleButton_scenario()">Create a Scenario</button>
         </div>
         
         <div id="todoListContainer"></div>
@@ -594,9 +594,11 @@ Here is a simple introduction. For a more detailed tutorial, please see the tuto
 - Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.
 - Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and switch buttons when you move into a different environment.
 - Clicking the same button will stop the current record. You can also cancel the record if it is incorrect. The 'Restart' button clears all cache and data.
-- When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment to 'chenxi.jiang@uzh.ch'.
+- When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment by email.
 
 If you have any problem, do not hesitate to contact me! :)
+
+Email: chenxi.jiang@uzh.ch
 
 ---
 
@@ -735,7 +737,7 @@ If you have any problem, do not hesitate to contact me! :)
             const titleInput = document.createElement("input");
             titleInput.id = "scenarioTitle";
             titleInput.className = "scenario-item-container";
-            titleInput.placeholder = "Scenario Title";
+            titleInput.placeholder = "Scenario Name";
             todoListContainer.appendChild(titleInput);
 
             const itemsContainer = document.createElement("div");
@@ -743,13 +745,13 @@ If you have any problem, do not hesitate to contact me! :)
             todoListContainer.appendChild(itemsContainer);
 
             const addItemButton = document.createElement("button");
-            addItemButton.textContent = "Add Item";
+            addItemButton.textContent = "Add plan";
             addItemButton.addEventListener("click", () => {
                 const itemContainer = document.createElement("div");
                 itemContainer.className = "scenario-item-container";
                 const itemInput = document.createElement("input");
                 itemInput.className = "scenario-item";
-                itemInput.placeholder = "Scenario Item";
+                itemInput.placeholder = "Plan";
                 itemContainer.appendChild(itemInput);
                 itemsContainer.appendChild(itemContainer);
             });
@@ -766,7 +768,13 @@ If you have any problem, do not hesitate to contact me! :)
                         text: value,
                         completed: false
                 }));
-                renderTodoList(todos, title);
+                
+                if ((title !== "") && todos.length > 0) {
+                    renderTodoList(todos, title);}
+                else {
+                    alert("Please input the title and your plan!")
+                }
+
             });
 
             const buttonContainer = document.createElement("div");
@@ -977,6 +985,21 @@ If you have any problem, do not hesitate to contact me! :)
             } else {
                 renderLogs();
                 button.innerText = 'Delete record';
+                button.style.backgroundColor = ''; 
+            }
+        }
+
+        function toggleButton_scenario() {
+            var button = document.getElementById('createScenarioButton');
+            if (button.innerText === 'Create a Scenario') {
+                createScenario();
+                button.innerText = 'Cancel creating';
+                button.style.backgroundColor = '#f3d157';
+            } else {
+                var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+                renderTodoList(storedTodos,storedTodosTile);
+                button.innerText = 'Create a Scenario';
                 button.style.backgroundColor = ''; 
             }
         }
