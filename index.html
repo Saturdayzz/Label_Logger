@@ -75,7 +75,7 @@
         }
 
         button#button4 {
-            background-color: #28a745;
+            background-color: #898888;
         }
 
         button:hover {
@@ -83,7 +83,7 @@
         }
 
         button#button4:hover {
-            background-color: #218838;
+            background-color: #666666;
         }
 
         button#addRecordButton {
@@ -731,6 +731,8 @@ Email: chenxi.jiang@uzh.ch
         });
 
         function createScenario(){
+            alert("When creating your scenario, please follow design protocol as below.\n1. Your scenario should include indoors, outdoors, semi-indoors environment.\n2. Please remain in a scenario for at least 5 minutes.")
+
             const todoListContainer = document.getElementById("todoListContainer");
             todoListContainer.innerHTML = "";
 
