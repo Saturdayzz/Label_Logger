@@ -420,7 +420,6 @@
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
         <span id="nameInput"></span>
-        <br><br>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
         <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
         <img id="statusImage" src="" alt="Status Image">
@@ -501,7 +500,7 @@
 
                 //localStorage.removeItem("todosKey");
                 var storedName = window.localStorage.getItem("nameKey")? window.localStorage.getItem("nameKey") : "";
-                document.getElementById("nameInput").value = storedName;
+                document.getElementById("nameInput").textContent = storedName;
                 recordName = storedName;
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
@@ -511,6 +510,8 @@
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                 var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+                var storedTodoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey")) ? JSON.parse(window.localStorage.getItem("todosIndexKey")) : null;
+                todoListIndex = storedTodoListIndex;
 
                 var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
                 freshman = storedFreshman;
@@ -648,6 +649,11 @@ Email: chenxi.jiang@uzh.ch
                         recordName = name;
                         document.getElementById("nameInput").textContent = name;
                         saveNameToLocalStorage();
+
+                        setTimeout(()=>{
+                            alert("Then please have a look at your scenario!");
+                            showPage('page3');
+                        },500)
 
                     },500);
                 }
@@ -1431,10 +1437,10 @@ Email: chenxi.jiang@uzh.ch
                 }
         });
 
-        document.getElementById("nameInput").addEventListener("change", function() {
+        /*document.getElementById("nameInput").addEventListener("change", function() {
             recordName = this.value;
             saveNameToLocalStorage();
-        });
+        });*/
 
         updateTime(); // Initial call to set time immediately
     </script>
