@@ -111,11 +111,25 @@
         }
 
         #cancelButton {
-            background-color: #dc3545;
+            background-color: #15aa1a;
         }
 
         #cancelButton:hover {
-            background-color: #c82333;
+            background-color: #129223;
+        }
+
+        #startOrEndButton {
+            width:100px;
+            height:100px;
+            background:rgb(222, 32, 32);
+            color:#fff;
+            border:none;
+            border-radius:50%;
+            margin-bottom: 60px;
+        }
+
+        #startOrEndButton:hover {
+            background-color: #c81e1e;
         }
 
         .inactive {
@@ -139,14 +153,18 @@
             color: #000000; 
         }
         #currentTime {
+            font-weight: normal;
             color: #666;
+        }
+        #startTime {
+            font-weight: normal;
         }
 
         #currentStatusLabel {
             color: #000000; 
         }
         #currentStatus {
-            color: #666;
+            color: #f21a1a;
         }
 
         #statusImage {
@@ -395,6 +413,7 @@
         .new-record-row {
             background-color: rgb(213, 230, 250);
         }
+        
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
@@ -420,6 +439,7 @@
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
         <span id="nameInput"></span>
+        <div id="timeDisplay"><span id="currentTimeLabel">Start Time:</span> <span id="startTime">--:--:--</span></div>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
         <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
         <img id="statusImage" src="" alt="Status Image">
@@ -428,6 +448,7 @@
         <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
         <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
         <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
+        <button id="startOrEndButton" onclick="toggleStartOrEndButton()">Start</button>
         <!-- <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button> -->
     </div>
 
@@ -494,6 +515,7 @@
             let todoListIndex = null;
             let todoListTitle = null;
             let freshman = 0;
+            let startTime = null;
 
             window.onload = function() {
                 showPage('page1');
@@ -516,10 +538,15 @@
                 var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
                 freshman = storedFreshman;
                 freshmanToLocalStorage();
+
+                var storedStartTime = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
+                startTime = storedStartTime;
+                document.getElementById("startTime").textContent = startTime;
                 
                 setTimeout(()=>{
                     if (freshman==0){
-                    popInformation();
+                        popInformation();
+                        getStartTime();
                 }
                             },400);
 
@@ -527,6 +554,16 @@
                                 alert("Welcome to participate in my research!\n\nIf you are new here, please have a look at 'About' (^_−). \nAfter completing data collection for a scenario, please export the log and send to chenxi.jiang@uzh.ch. \n\nEnjoy your journey here!");
                             },300);*/
             };
+
+            function getStartTime(){
+                var now = new Date();
+                var dateString = now.toLocaleDateString('en-GB');
+                var timeString = now.toLocaleTimeString('en-GB');
+                var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+                var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
+                document.getElementById('startTime').textContent = dateTimeString;
+                window.localStorage.setItem("startTimeKey", JSON.stringify(dateTimeString));
+            }
 
                 
         /*setInterval(function () {
@@ -576,6 +613,7 @@
                         localStorage.removeItem("todosIndexKey");
                         localStorage.removeItem("clickKey");
                         localStorage.removeItem("freshmanKey");
+                        localStorage.removeItem("startTimeKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -738,7 +776,7 @@ Email: chenxi.jiang@uzh.ch
                     const allChecked = document.querySelectorAll('.todo-checkbox:checked').length === todos.length;
                     if (allChecked) {
                         setTimeout(() => {
-                            alert("Congratulation! You completed the data collection, thank you very much! Now please export the log and send to the aassigned mail address.");
+                            alert("Congratulation! You completed the data collectio! Now please go to 'Log' page, export the log and send to Chenxi's mail address.");
                         }, 300);
                     }
                 });
@@ -1017,6 +1055,18 @@ Email: chenxi.jiang@uzh.ch
             } else {
                 saveRecord();
                 button.innerText = 'Add record';
+                button.style.backgroundColor = ''; 
+            }
+        }
+
+        function toggleStartOrEndButton(){
+            var button = document.getElementById('startOrEndButton');
+            if (button.innerText === 'Start'){
+                alert("Data collection start!")
+                button.innerText = 'End';
+                button.style.backgroundColor = '#999999';
+            } else {
+                button.innerText = 'Start';
                 button.style.backgroundColor = ''; 
             }
         }
