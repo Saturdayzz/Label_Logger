@@ -403,7 +403,7 @@
     <div id="page1" class="content active">
         <div id="exportContainer" onclick="popInformation()">
             <img id="exportIcon" src="images/information.svg" alt="Export Icon">
-            <span id="exportText">About</span>
+            <span id="exportText">Info</span>
         </div>
 
         <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
@@ -419,7 +419,7 @@
         </div>
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
-        <input type="text" id="nameInput">
+        <span id="nameInput"></span>
         <br><br>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
         <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
@@ -494,6 +494,7 @@
             let random_buttonClicked = false;
             let todoListIndex = null;
             let todoListTitle = null;
+            let freshman = 0;
 
             window.onload = function() {
                 showPage('page1');
@@ -510,10 +511,20 @@
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                 var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+
+                var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
+                freshman = storedFreshman;
+                freshmanToLocalStorage();
                 
                 setTimeout(()=>{
+                    if (freshman==0){
+                    popInformation();
+                }
+                            },400);
+
+                /*setTimeout(()=>{
                                 alert("Welcome to participate in my research!\n\nIf you are new here, please have a look at 'About' (^_−). \nAfter completing data collection for a scenario, please export the log and send to chenxi.jiang@uzh.ch. \n\nEnjoy your journey here!");
-                            },300);
+                            },300);*/
             };
 
                 
@@ -527,6 +538,11 @@
             var cookieValue = cookie ? cookie.pop() : null;
             document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
         }, 1000);*/
+
+            function freshmanToLocalStorage() {
+                var value = 1;
+                window.localStorage.setItem("freshmanKey", value);
+            }
         
             function saveNameToLocalStorage() {
                 var value = recordName;
@@ -558,6 +574,7 @@
                         localStorage.removeItem("todosTitleKey")
                         localStorage.removeItem("todosIndexKey");
                         localStorage.removeItem("clickKey");
+                        localStorage.removeItem("freshmanKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -570,11 +587,13 @@
                 document.getElementById('popupOverlay').style.display = 'block';
                 document.getElementById('popup').style.display = 'block';
                 const markdown = `
-### Welcome to MOASIS Data Collection
-
 ---
 
-Thank you for participating in my research! This research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data. This will help to improve indoor-outdoor activity detection for the MOASIS project and have a better understanding of the daily movements of elderly individuals.
+### Welcome!
+
+Thank you for participating in my research! If you are new here, please read this page patiently (^_−).
+
+This research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data. This will help to improve indoor-outdoor activity detection for the MOASIS project and have a better understanding of the daily movements of elderly individuals.
 
 In this resarch, I classify the environment to three different types, the definitions are as follows.
 
@@ -590,13 +609,16 @@ In this resarch, I classify the environment to three different types, the defini
 ### Tutorial
 Here is a simple introduction. For a more detailed tutorial, please see the tutorial sheet.
 
-- First, please enter your name (you don't have to use your real name).
+- First, please enter your name (you don't have to use your real name). Once confirm, name cannot be changed.
 - Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.
 - Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and switch buttons when you move into a different environment.
 - Clicking the same button will stop the current record. You can also cancel the record if it is incorrect. The 'Restart' button clears all cache and data.
+- You can check and edit your log in 'Log' page. If you think the record is incorrect, please correct them!
 - When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment by email.
 
 If you have any problem, do not hesitate to contact me! :)
+
+Enjoy your journey here!
 
 Email: chenxi.jiang@uzh.ch
 
@@ -610,6 +632,25 @@ Email: chenxi.jiang@uzh.ch
             function closePopup() {
                 document.getElementById('popupOverlay').style.display = 'none';
                 document.getElementById('popup').style.display = 'none';
+
+                if(freshman==0){
+                    setTimeout(()=>{
+                        var name = prompt("Please input your name:");
+                        while(!name){
+                            name = prompt("Please input a valid name:");
+                        }
+                        if (name){
+                            while (!confirm(`Are you ${name}?`)){
+                            prompt("Please input your name:");
+                            }
+                        }
+
+                        recordName = name;
+                        document.getElementById("nameInput").textContent = name;
+                        saveNameToLocalStorage();
+
+                    },500);
+                }
             }
 
             ///////////////
