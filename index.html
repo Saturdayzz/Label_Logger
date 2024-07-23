@@ -441,7 +441,7 @@
         <span id="nameInput"></span>
         <div id="timeDisplay"><span id="currentTimeLabel">Start Time:</span> <span id="startTime">--:--:--</span></div>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
-        <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
+        <div id="statusDisplay"><span id="currentStatusLabel">Current Label: </span> <span id="currentStatus">You has no label, please choose one!</span></div>
         <img id="statusImage" src="" alt="Status Image">
         <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
         <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
@@ -630,11 +630,13 @@
 
 ### Welcome!
 
-Thank you for participating in my research! If you are new here, please read this page patiently (^_−).
+Thank you for participating in my research! **If you are new here**, please read this page patiently ;).
 
-This research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data. This will help to improve indoor-outdoor activity detection for the MOASIS project and have a better understanding of the daily movements of elderly individuals.
+My research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data.
 
-In this resarch, I classify the environment to three different types, the definitions are as follows.
+"Label Logger" is an labeling APP for "uTrail" device. The goal is to add environment label when recording "uTrail" data. When data collection begions, you need to specify which kind of environment you are and choose the label. Also you need to change the label in time when changing environment.
+
+In this resarch, I classify the environment to three different types (three environment labels), the definitions are as follows.
 
 **Indoor**: Activities conducted inside a building or enclosed space.
 
@@ -648,12 +650,20 @@ In this resarch, I classify the environment to three different types, the defini
 ### Tutorial
 Here is a simple introduction. For a more detailed tutorial, please see the tutorial sheet.
 
-- First, please enter your name (you don't have to use your real name). Once confirm, name cannot be changed.
-- Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.
-- Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and switch buttons when you move into a different environment.
-- Clicking the same button will stop the current record. You can also cancel the record if it is incorrect. The 'Restart' button clears all cache and data.
-- You can check and edit your log in 'Log' page. If you think the record is incorrect, please correct them!
-- When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment by email.
+--- **Here is important** ---
+
+- First, please enter your name (you don't have to use your real name) in "Home" page. Once confirm, name cannot be changed.
+- Next, go to the "Scenario" page, you will see your scenario which is randomly selected. It will give you an general idea where to go and what to do, but you don't need to do it very strictly.
+- Then, when you are ready, let's begin! Go back to "Home" page, press "Start" button and select your first environment label!
+- During the data collection, you wear the "uTrail" device, follow the scenario task and changing environment label when chaning environment.
+- When each data collection is complete, go to "Log" page and click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment by email.
+
+--- **Here is important** ---
+
+For more functions:
+- In "Home" page, "clicking the same button" can stop the current record. You can also "Cancel" the record if it is incorrect. The "Restart" button clears all cache and data.
+- In "Log" page, you can edit your log by adding or deleting an record. If you think the record is incorrect, please correct them!
+- In "Scenario" page, you can change scenario once or create your own scenario (please follow the design protocol).
 
 If you have any problem, do not hesitate to contact me! :)
 
@@ -664,6 +674,8 @@ Email: chenxi.jiang@uzh.ch
 ---
 
 **Thank you for your valuable contribution!**
+
+(swipe up you will see a "X" button in the upper left to close the window)
             `;
             document.getElementById("markdown-content").innerHTML = marked.parse(markdown);
             }
@@ -1366,7 +1378,7 @@ Email: chenxi.jiang@uzh.ch
             }
 
             if (selectedButton === buttonId) {
-                if (confirm("Do you want to stop the current status?")) {
+                if (confirm("Do you want to stop the current label?")) {
                     logButtonClick(buttonId, "Stop");
                     selectedButton = null;
                     currentStatus.textContent= "None";
@@ -1378,38 +1390,38 @@ Email: chenxi.jiang@uzh.ch
 
             if (selectedButton === null){
                 if (buttonId == 1){
-                    if (!confirm("Do you want to select the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
                     return;
                 }}
                 else if (buttonId === 2){
-                    if (!confirm("Do you want to select the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    if (!confirm("Do you want to select the label?\n\nOutdoor: Activities conducted outside in the open air.")) {
                     return;
                 }}
                 else if (buttonId === 3){
-                    if (!confirm("Do you want to select the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    if (!confirm("Do you want to select the label?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
                     return;
                 }}
                 else if (buttonId === 4){
-                    if (!confirm("Do you want to select the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    if (!confirm("Do you want to select the label?\n\nNot sure: I am not sure which environment it's belongs to.")) {
                     return;
                 }}
             }
 
             if (selectedButton !== null) {
                 if (buttonId == 1){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
                     return;
                 }}
                 else if (buttonId === 2){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nOutdoor: Activities conducted outside in the open air.")) {
                     return;
                 }}
                 else if (buttonId === 3){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
                     return;
                 }}
                 else if (buttonId === 4){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nNot sure: I am not sure which environment it's belongs to.")) {
                     return;
                 }}
             }
@@ -1477,7 +1489,7 @@ Email: chenxi.jiang@uzh.ch
                 alert("No state now, no need to cancel!")
             }
             else {
-                if(confirm("Do you want to cancel the status?\n\nOnly if you selected a wrong button, you need to cancel it. ")) {
+                if(confirm("Do you want to cancel the label?\n\nOnly if you selected a wrong label, you need to cancel it. ")) {
                     deleteRow(buttonLogs.length - 1);
                     //logButtonClick(selectedButton, "Cancel");
                     selectedButton = null;
