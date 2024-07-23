@@ -575,7 +575,7 @@
                 setTimeout(()=>{
                     if (freshman==0){
                         popInformation();
-                        getStartTime();
+                        //getStartTime();
                 }
                             },400);
 
@@ -1117,12 +1117,16 @@ Email: chenxi.jiang@uzh.ch
         function toggleStartOrEndButton(){
             var button = document.getElementById('startOrEndButton');
             if (button.innerText === 'Start'){
-                alert("Data collection start!")
+                alert("Data collection starts!")
                 button.innerText = 'End';
                 button.style.backgroundColor = '#999999';
+                //var starttime = getCurrentTime()
+                getStartTime();
             } else {
+                alert("Data collection ends! Please go to 'Log' page and export your log.")
                 button.innerText = 'Start';
                 button.style.backgroundColor = ''; 
+                var endtime = getCurrentTime()
             }
         }
 
