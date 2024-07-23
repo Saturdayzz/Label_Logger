@@ -413,7 +413,24 @@
         .new-record-row {
             background-color: rgb(213, 230, 250);
         }
-        
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        #nameInput {
+            margin-right: 10px;
+        }
+        #nameConfirmButton {
+            margin-right: 5px;
+            width: 60px; 
+            height: 30px; 
+            font-size: 12px;
+            padding: 5px;
+            background-color: #000;
+        }
+        #nameConfirmButton:hover {
+            background-color: #000000cf;
+        }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
@@ -422,7 +439,7 @@
     <div id="page1" class="content active">
         <div id="exportContainer" onclick="popInformation()">
             <img id="exportIcon" src="images/information.svg" alt="Export Icon">
-            <span id="exportText">Info</span>
+            <span id="exportText">Information</span>
         </div>
 
         <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
@@ -438,7 +455,11 @@
         </div>
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
-        <span id="nameInput"></span>
+        <div class="input-container">
+            <input type="text" id="nameInput">
+            <button id="nameConfirmButton">Confirm</button>
+        </div>
+
         <div id="timeDisplay"><span id="currentTimeLabel">Start Time:</span> <span id="startTime">--:--:--</span></div>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
         <div id="statusDisplay"><span id="currentStatusLabel">Current Label: </span> <span id="currentStatus">You has no label, please choose one!</span></div>
@@ -458,6 +479,8 @@
             <span id="exportText">Export</span>
         </div>
         <h2>Log Table</h2>
+        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">You can edit your label records here, please check your recordsbefore exporting.
+        </div>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
             <button id="deleteRecordButton" onclick="toggleButton_delete()">Delete record</button>
@@ -467,6 +490,8 @@
 
     <div id="page3" class="content">
         <h2>Embark on Your Data Journey!</h2>
+        <sapn style="font-size: 15px;color: rgb(0, 0, 0);">- Please read and select your scenario before start.<br>- Please don't change after starting data collection. <br>- Please generally follow the scenario tasks.<br> - Excluding the choice of scenario, actions in this page won't be recorded 
+        </sapn>
         <div id="buttonContainer">
             <button id="randomTodoListButton">Change Scenario</button>
             <button id="createScenarioButton" onclick="toggleButton_scenario()">Create a Scenario</button>
@@ -522,8 +547,12 @@
 
                 //localStorage.removeItem("todosKey");
                 var storedName = window.localStorage.getItem("nameKey")? window.localStorage.getItem("nameKey") : "";
-                document.getElementById("nameInput").textContent = storedName;
+                document.getElementById("nameInput").value = storedName;
                 recordName = storedName;
+                if(recordName) {
+                    nameInput.disabled = true;
+                    nameConfirmButton.disabled = true;
+                }
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
@@ -537,7 +566,7 @@
 
                 var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
                 freshman = storedFreshman;
-                freshmanToLocalStorage();
+                //freshmanToLocalStorage();
 
                 var storedStartTime = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
                 startTime = storedStartTime;
@@ -585,6 +614,7 @@
             function saveNameToLocalStorage() {
                 var value = recordName;
                 window.localStorage.setItem("nameKey", value);
+                alert(`Name saved: ${value}`)
             }
 
             function saveLogToLocalStorage() {
@@ -630,7 +660,7 @@
 
 ### Welcome!
 
-Thank you for participating in my research! **If you are new here**, please read this page patiently ;).
+Thank you for participating in my research! **If you are new here, please read this page patiently, then close the window** ;).
 
 My research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data.
 
@@ -697,13 +727,17 @@ Email: chenxi.jiang@uzh.ch
                         }
 
                         recordName = name;
-                        document.getElementById("nameInput").textContent = name;
+                        document.getElementById("nameInput").value = name;
                         saveNameToLocalStorage();
+                        nameInput.disabled = true;
+                        nameConfirmButton.disabled = true;
 
                         setTimeout(()=>{
                             alert("Then please have a look at your scenario!");
                             showPage('page3');
                         },500)
+
+                        //freshman = 1;
 
                     },500);
                 }
@@ -1011,6 +1045,13 @@ Email: chenxi.jiang@uzh.ch
                 if(random_buttonClicked){
                     changeRandomButtonColor();
                 }
+                setTimeout(()=>{
+                    if(freshman==0){
+                        alert("Please confrim your scenario and the tasks, when you are ready, go back to 'Home' page, press 'Start' and choose your first label! ;)")
+                        freshman=1;
+                        freshmanToLocalStorage();
+                    }
+                }, 500)  
             }
         }
         
@@ -1064,10 +1105,12 @@ Email: chenxi.jiang@uzh.ch
                 addRecord();
                 button.innerText = 'Save';
                 button.style.backgroundColor = '#1576ff';
+                document.getElementById('logpageNote').textContent = "To save record, please select label and time.";
             } else {
                 saveRecord();
                 button.innerText = 'Add record';
                 button.style.backgroundColor = ''; 
+                document.getElementById('logpageNote').textContent = "";
             }
         }
 
@@ -1093,10 +1136,12 @@ Email: chenxi.jiang@uzh.ch
                 deleteRecord();
                 button.innerText = 'Deleting...';
                 button.style.backgroundColor = '#f3d157';
+                document.getElementById('logpageNote').textContent = "Your are in deletion mode now!";
             } else {
                 renderLogs();
                 button.innerText = 'Delete record';
                 button.style.backgroundColor = ''; 
+                document.getElementById('logpageNote').textContent = "";
             }
         }
 
@@ -1497,6 +1542,14 @@ Email: chenxi.jiang@uzh.ch
                     statusImage.style.display = "none";
                     resetButtonStates();}
                 }
+        });
+
+        document.getElementById("nameConfirmButton").addEventListener("click", function() {
+            var nameInput = document.getElementById("nameInput");
+            recordName = nameInput.value;
+            saveNameToLocalStorage(recordName);
+            nameInput.disabled = true;
+            nameConfirmButton.disabled = true;
         });
 
         /*document.getElementById("nameInput").addEventListener("change", function() {
