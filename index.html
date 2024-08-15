@@ -11,6 +11,7 @@
             background-color: #ffffff;
             margin: 0;
             padding: 20px;
+            margin-bottom: 60px;
         }
 
         .content {
@@ -74,7 +75,7 @@
         }
 
         button#button4 {
-            background-color: #28a745;
+            background-color: #898888;
         }
 
         button:hover {
@@ -82,19 +83,23 @@
         }
 
         button#button4:hover {
-            background-color: #218838;
+            background-color: #666666;
         }
 
         button#addRecordButton {
-            background-color: #ed3d49;
+            background-color: #ef414d;
         }
 
         button#deleteRecordButton {
-            background-color: #918e8e;
+            background-color: #3591d7;
         }
 
         button#randomTodoListButton {
             background-color: #00b318;
+        }
+
+        button#createScenarioButton {
+            background-color: #3591d7;
         }
 
         #exportButton {
@@ -106,11 +111,35 @@
         }
 
         #cancelButton {
-            background-color: #dc3545;
+            background-color: #15aa1a;
         }
 
         #cancelButton:hover {
-            background-color: #c82333;
+            background-color: #129223;
+        }
+
+        #startOrEndButton {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000;
+            color: #fff;
+            width:100px;
+            height:100px;
+            position: fixed;
+            bottom: 0;
+            left: auto;
+            right: 15px;
+            z-index: 1000;
+            background:rgb(222, 32, 32);
+            color:#fff;
+            opacity: 0.9;
+            border:4px solid #ea4141;
+            border-radius:50%;
+            margin-bottom: 60px;
+        }
+
+        #startOrEndButton:hover {
+            background-color: #c81e1e;
         }
 
         .inactive {
@@ -134,14 +163,18 @@
             color: #000000; 
         }
         #currentTime {
+            font-weight: normal;
             color: #666;
+        }
+        #startTime {
+            font-weight: normal;
         }
 
         #currentStatusLabel {
             color: #000000; 
         }
         #currentStatus {
-            color: #666;
+            color: #f21a1a;
         }
 
         #statusImage {
@@ -152,33 +185,47 @@
             margin: 0 auto;
         }
 
-        .navbar button {
-            padding: 0; 
-            margin: 0;
-            border: none;
-            border-radius: 5px;
-            background: none; 
-            color: inherit;
-            font-size: 16px;
-            cursor: pointer;
-            flex: 1;
-        }
-
-        .navbar button:hover {
-            background-color: #2b2b2bd8; 
-            color: #000;
-        }
-
         .navbar {
             display: flex;
             justify-content: space-around;
-            background-color: #000; 
-            color: #fff; 
+            background-color: #000;
+            color: #fff;
             height: 45px;
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 1000;
+        }
+
+        .navbar button {
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-radius: 5px;
+            background: none;
+            color: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar button:hover {
+            background-color: #2b2b2bd8;
+            color: #ffffff;
+        }
+
+        .navbar img.icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .scenario-item-container {
+            margin-bottom: 10px;
         }
 
         table {
@@ -231,6 +278,21 @@
             color: #999999;
             cursor: not-allowed; 
         }
+
+        #buttonContainer_small {
+            display: flex;
+            gap: 10px;
+        }
+
+        #buttonContainer_small button {
+            width: 150px;
+            padding: 5px; 
+            flex: none;
+            background-color: #e1e0e0;
+            color: #201f1f;
+            font-size: 15px;
+        }
+
         #buttonContainer {
             display: flex;
             gap: 10px;
@@ -290,8 +352,14 @@
         }
 
         #exportIcon {
-            width: 24px; 
-            height: 24px; 
+            width: 25px; 
+            height: 25px; 
+            margin-right: 5px; 
+        }
+
+        #exportIcon2 {
+            width: 35px; 
+            height: 35px; 
             margin-right: 5px; 
         }
 
@@ -299,6 +367,13 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 500; 
             font-size: 15px;
+            color: #000;
+        }
+
+        #exportText2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800; 
+            font-size: 18px;
             color: #000;
         }
 
@@ -361,6 +436,24 @@
         .new-record-row {
             background-color: rgb(213, 230, 250);
         }
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        #nameInput {
+            margin-right: 10px;
+        }
+        #nameConfirmButton {
+            margin-right: 5px;
+            width: 60px; 
+            height: 30px; 
+            font-size: 12px;
+            padding: 5px;
+            background-color: #000;
+        }
+        #nameConfirmButton:hover {
+            background-color: #000000cf;
+        }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-dyZ88mC6Up2uqSdhJ8UZ7k8tQ5B3Om0ls0E4x2Rxpocic4Sxj+5LxGEnmJo4e1K" crossorigin="anonymous">
@@ -369,7 +462,7 @@
     <div id="page1" class="content active">
         <div id="exportContainer" onclick="popInformation()">
             <img id="exportIcon" src="images/information.svg" alt="Export Icon">
-            <span id="exportText">About</span>
+            <span id="exportText">Information</span>
         </div>
 
         <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
@@ -385,25 +478,32 @@
         </div>
         <h1>Label Logger</h1>
         <label for="nameInput">Name:</label>
-        <input type="text" id="nameInput">
-        <br><br>
+        <div class="input-container">
+            <input type="text" id="nameInput">
+            <button id="nameConfirmButton">Confirm</button>
+        </div>
+
+        <div id="timeDisplay"><span id="currentTimeLabel">Start Time:</span> <span id="startTime">--:--:--</span></div>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
-        <div id="statusDisplay"><span id="currentStatusLabel">Current Status: </span> <span id="currentStatus">None</span></div>
+        <div id="statusDisplay"><span id="currentStatusLabel">Current Label: </span> <span id="currentStatus">You have no label, please choose one!</span></div>
         <img id="statusImage" src="" alt="Status Image">
         <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
         <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
         <button id="button3"><img src="images/semi_indoor.svg" class="icon" alt="Semi-Indoor Icon">Semi-Indoor</button>
         <button id="button4"><img src="images/not_sure.svg" class="icon" alt="Not Sure Icon">Not sure</button>
         <button id="cancelButton"><img src="images/cancel.svg" class="icon" alt="Cancel Icon">Cancel</button>
+        <button id="startOrEndButton" onclick="toggleStartOrEndButton()">Start</button>
         <!-- <button id="exportButton"><img src="images/export.svg" class="icon" alt="Export Icon">Export Logs</button> -->
     </div>
 
     <div id="page2" class="content">
         <div id="exportContainer" onclick="exportLogs()">
-            <img id="exportIcon" src="images/export2.svg" alt="Export Icon">
-            <span id="exportText">Export</span>
+            <img id="exportIcon2" src="images/export2.svg" alt="Export Icon">
+            <span id="exportText2">Export</span>
         </div>
         <h2>Log Table</h2>
+        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">You can edit your label records here, please check your recordsbefore exporting.
+        </div>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
             <button id="deleteRecordButton" onclick="toggleButton_delete()">Delete record</button>
@@ -413,14 +513,20 @@
 
     <div id="page3" class="content">
         <h2>Embark on Your Data Journey!</h2>
-        <button id="randomTodoListButton">Change Scenario</button>
+        <sapn style="font-size: 15px;color: rgb(0, 0, 0);">- Please read and select your scenario before start, and follow the tasks after starting. <br> - Excluding the choice of scenario, actions in this page won't be recorded.<br> - Each task may contain more than one transitions, and the label in bracket is only as reference.
+        </sapn>
+        <div id="buttonContainer">
+            <button id="randomTodoListButton">Change Scenario</button>
+            <button id="createScenarioButton" onclick="toggleButton_scenario()">Create a Scenario</button>
+        </div>
+        
         <div id="todoListContainer"></div>
     </div>
     
     <div class="navbar">
-        <button onclick="showPage('page3')"><img src="images/journey2.svg" class="icon" alt="Log Icon"></button>
-        <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon"></button>
-        <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon"></button>
+        <button onclick="showPage('page3')"><img src="images/journey2.svg" class="icon" alt="Log Icon">scenario</button>
+        <button onclick="showPage('page1')"><img src="images/home.svg" class="icon" alt="Log Icon">home</button>
+        <button onclick="showPage('page2')"><img src="images/form.svg" class="icon" alt="Log Icon">log</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
@@ -441,21 +547,24 @@
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
-                { title: "Irchel Campus Scenario 1", items: ["1.Start outdoors in the courtyard", "2.Enter the teaching building and walk into a room staying for >8 minutes", "3.Sit by the window for 5-8 minutes", "4.Walk to the garden between buildings and stay for 5-8 minutes", "5.Walk to the library staying for 5-8 minutes", "6.Walk in Irchel Park for 5-8 minutes"] },
-                { title: "Train Station Scenario", items: ["1.Depart from the central train station", "2.Walk through Bahnhofstrasse to Globus", "3 Browse at least four stores in the mall satying 5-8 minutes in each", "4. Stay near the windows for 5-8 minutes before leaving.", "5.Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes"] },
-                { title: "Central Campus Scenario", items: ["1.Start at center campus", "2.Saty at lounge area for >8minutes", "3.Entering a classroom and staying >8minutes", "4.Leave the building and walk to take Polyban", "5.Have a walk in the alley", "6.Have a walk along the Limmatquai"] },
-                { title: "Garden Scenario", items: ["1.Start at outside garden", "2.Stay there for 5-8 minutes", "3.Saty inside the house>8 minutes", "4.Stay under the eaves for 5-8 minutes", "5. Walk to the community center and satying for 5-8 minutes","*6.Walk to nearby gym and satying for 5-8 minutes"] },
-                { title: "Irchel Campus Scenario 2", items: ["1.Start at Irchel campus", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes", "3.Walk into the cafeteria and stay for 5-8 minutes", "4.Walk to 'Lichthof' and sit there for 5-8 minutes", "5.Get into your office room and stay for 5-8 minutes"] },
-                { title: "Central Scenario", items: ["1.Start at a nearby open area", "2.Stay under the station's glass roof for 5 minutes", "3.Take tram 9 to Bellevue", "4. Get off the tram and walk to train station Stadelhofen", "5.Hop on a train to Zurich HB (sit on the lower floor)", "6.Get off the train and stay on the ground floor of Zurich HB"] },
-                { title: "Tram 7 Scenario", items: ["1.Start from Milchbuck", "2.Take tram 7 to Schwamendingerplatz", "3.Get off the tram and enter Coop", "4.Stay inside for 5-8 minutes", "5.Enter Migros and stay inside for 5-8 minutes", "6.Leave Schwamendingerplatz by tram"] },
-                { title: "City Central Shopping Scenario", items: ["1.Start at Zurich Hb", "2.Walk along Bahnhofstrasse towards Rennweg", "3.Enter 2-3 shops on your way (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4.Board the tram at Rennweg till Bürkliplatz", "5.Have a 5-minute walk along the lake"] }
-            ];
+            { title: "Irchel Campus Scenario 1", items: ["1. Start outdoors in the courtyard (outdoor)", "2. Enter the teaching building and walk into a room staying for >8 minutes (indoor)", "3. Sit by the window for 5-8 minutes (semi-indoor)", "4. Walk to Medizinerhof between buildings and stay for 5-8 minutes (semi-indoor)", "5. Walk to the library staying for 5-8 minutes (indoor)", "6. Walk in the Irchel Park for 5-8 minutes (outdoor)"] },
+            { title: "Train Station Scenario", items: ["1. Depart from the central train station (outdoor)", "2. Walk through Bahnhofstrasse to Globus (outdoor)", "3 Browse at least four stores in the mall staying 5-8 minutes in each (indoor)", "4. Stay near the windows for 5-8 minutes before leaving. (semi-indoor)", "5. Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes (indoor)"] },
+            { title: "Central Campus Scenario", items: ["1. Start at central campus", "2. Stay at the  Lichthof for > 8 minutes (semi-indoor)", "3. Enter a classroom and stay for > 8minutes (indoor)", "4. Leave the building and walk to take Polyban (outdoor)", "5. Take a walk in the alley (semi-indoor)", "6. Take a walk along the Limmatquai (outdoor)"] },
+            { title: "Garden Scenario", items: ["1. Start outside in the garden and stay there for 5-8 minutes (outdoor)", "2. Stay inside the house > 8 minutes (indoor)", "3. Stay under the eaves for 5-8 minutes (semi-indoor)", "4. Walk to the community center and stay there for 5-8 minutes (outdoor, indoor)","(optional)5. Walk to a nearby gym and stay for 5-8 minutes (indoor)"] },
+            { title: "Irchel Campus Scenario 2", items: ["1. Start at Irchel campus (outdoor)", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes (semi-indoor)", "3. Walk into (outdoor) the cafeteria and stay for 5-8 minutes (indoor)", "4. Walk to 'Lichthof' and sit there for 5-8 minutes (semi-indoor)", "5. Get into your office room and stay for 5-8 minutes (indoor)"] },
+            { title: "Central Scenario", items: ["1. Start at an open area on or near 'Central' square (outdoor)", "2. Stay under the station's glass roof for 5 minutes (semi-indoor)", "3. Take tram to Bellevue (semi-indoor)", "4. Get off the tram and walk to the train station Stadelhofen (outdoor)", "5. Hop on a train to Zurich HB (indoor)", "6. Get off the train and stay on the ground floor of Zurich HB (semi-indoor)"] },
+            { title: "Tram 7 Scenario", items: ["1. Start from Milchbuck", "2. Take tram 7 to Schwamendingerplatz (indoor)", "3. Get off the tram and enter Coop (indoor)", "4. Stay inside for 5-8 minutes", "5. Enter Migros and stay inside for 5-8 minutes (indoor)", "6. Leave Schwamendingerplatz by tram (semi-indoor)"] },
+            { title: "City Center Shopping Scenario", items: ["1. Start at Zurich HB", "2. Walk along Bahnhofstrasse towards Rennweg (outdoor)", "3. Enter 2-3 shops on your way (indoor) (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4. Board the tram at Rennweg till Bürkliplatz (semi-indoor)", "5. Take a 5-minute walk along the lake (outdoor)"] }
+                        ];
 
             const todoListContainer = document.getElementById("todoListContainer");
             const randomTodoListButton = document.getElementById("randomTodoListButton");
             let random_buttonClicked = false;
             let todoListIndex = null;
             let todoListTitle = null;
+            let freshman = 0;
+            let startTime = null;
+            let endTime = null;
 
             window.onload = function() {
                 showPage('page1');
@@ -464,6 +573,10 @@
                 var storedName = window.localStorage.getItem("nameKey")? window.localStorage.getItem("nameKey") : "";
                 document.getElementById("nameInput").value = storedName;
                 recordName = storedName;
+                if(recordName) {
+                    nameInput.disabled = true;
+                    nameConfirmButton.disabled = true;
+                }
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
@@ -472,11 +585,49 @@
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                 var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+                var storedTodoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey")) ? JSON.parse(window.localStorage.getItem("todosIndexKey")) : null;
+                todoListIndex = storedTodoListIndex;
+
+                var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
+                freshman = storedFreshman;
+                //freshmanToLocalStorage();
+
+                var storedStartTime = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
+                startTime = storedStartTime;
+                document.getElementById("startTime").textContent = startTime;
                 
                 setTimeout(()=>{
+                    if (freshman==0){
+                        popInformation();
+                        //getStartTime();
+                }
+                            },400);
+
+                /*setTimeout(()=>{
                                 alert("Welcome to participate in my research!\n\nIf you are new here, please have a look at 'About' (^_−). \nAfter completing data collection for a scenario, please export the log and send to chenxi.jiang@uzh.ch. \n\nEnjoy your journey here!");
-                            },300);
+                            },300);*/
             };
+
+            function getStartTime(){
+                var now = new Date();
+                var dateString = now.toLocaleDateString('en-GB');
+                var timeString = now.toLocaleTimeString('en-GB');
+                var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+                var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
+                document.getElementById('startTime').textContent = dateTimeString;
+                window.localStorage.setItem("startTimeKey", JSON.stringify(dateTimeString));
+                startTime=dateTimeString;
+            }
+
+            function getEndTime(){
+                var now = new Date();
+                var dateString = now.toLocaleDateString('en-GB');
+                var timeString = now.toLocaleTimeString('en-GB');
+                var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+                var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
+                window.localStorage.setItem("endTimeKey", JSON.stringify(dateTimeString));
+                endTime=dateTimeString;
+            }
 
                 
         /*setInterval(function () {
@@ -489,10 +640,16 @@
             var cookieValue = cookie ? cookie.pop() : null;
             document.getElementById("cookieData").innerHTML = `Cookie: ${cookieValue || "NULL"}`;
         }, 1000);*/
+
+            function freshmanToLocalStorage() {
+                var value = 1;
+                window.localStorage.setItem("freshmanKey", value);
+            }
         
             function saveNameToLocalStorage() {
                 var value = recordName;
                 window.localStorage.setItem("nameKey", value);
+                alert(`Name saved: ${value}`)
             }
 
             function saveLogToLocalStorage() {
@@ -512,7 +669,7 @@
             }
 
             function restart(){
-                if(confirm("Do you decide to restart the experiment? If do so, you will LOSE ALL DATA.")){
+                if(confirm("Do you decide to restart the experiment? If do so, you will LOSE ALL DATA. If you completed a data collection, please EXPORT the log first!")){
                     if(confirm("Again :) Are you sure to delete all data logged?")){
                         localStorage.removeItem("nameKey");
                         localStorage.removeItem("logKey");
@@ -520,6 +677,8 @@
                         localStorage.removeItem("todosTitleKey")
                         localStorage.removeItem("todosIndexKey");
                         localStorage.removeItem("clickKey");
+                        localStorage.removeItem("freshmanKey");
+                        localStorage.removeItem("startTimeKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -532,37 +691,56 @@
                 document.getElementById('popupOverlay').style.display = 'block';
                 document.getElementById('popup').style.display = 'block';
                 const markdown = `
-### Welcome to MOASIS Data Collection
-
 ---
 
-Thank you for participating in my research! This research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data. This will help to improve indoor-outdoor activity detection for the MOASIS project and have a better understanding of the daily movements of elderly individuals.
+### Welcome!
 
-In this resarch, I classify the environment to three different types, the definitions are as follows.
+Thank you for participating in my research! **If you are new here, please read this page patiently, then close the window** ;).
 
-**Indoor**: Activities conducted inside a building or enclosed space.
+My research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data.
+
+"Label Logger" is a labeling APP for the "uTrail" device. The goal is to add environment labels when recording "uTrail" data. When data collection begins, you need to specify which kind of environment you are in and choose the corresponding label. Also, you need to change the label in time when changing the environment (e.g. from indoor to outdoor).
+
+In this research, I classify the environment to three different types (three environment labels), the definitions are as follows.
+
+**Indoor**: Activities conducted inside a building, enclosed space, or train in a tunnel.
 
 **Outdoor**: Activities conducted outside in the open air.
 
-**Semi-Indoor**: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.
-
+**Semi-Indoor**: Activities conducted in spaces that are partially enclosed, such as a covered patio, a greenhouse, or a train outside a tunnel.
 
 ---
 
 ### Tutorial
 Here is a simple introduction. For a more detailed tutorial, please see the tutorial sheet.
 
-- First, please enter your name (you don't have to use your real name).
-- Next, click the first icon on the left to get the data collection scenario. You can change your selection once during each data collection.
-- Then, you can start collecting data based on the scenario. Click the scenario button to start timing, and switch buttons when you move into a different environment.
-- Clicking the same button will stop the current record. You can also cancel the record if it is incorrect. The 'Restart' button clears all cache and data.
-- When each data collection is complete, click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment to 'chenxi.jiang@uzh.ch'.
+--- **Here is important** ---
+
+- First, please enter your name (you don't have to use your real name) in "Home" page. Once confirmed, the name cannot be changed.
+- Next, go to the "Scenario" page, where you will see your scenario which is randomly selected. It will give you a general idea where to go and what to do.
+- Then, when you are ready, let's begin! Go back to the "Home" page, press the "Start" button and select your first environment label!
+- During the data collection, you should wear the "uTrail" device at all times, follow the scenario tasks and change the environment label when changing environment.
+- When each data collection is complete, go to the "Log" page and click the "Export" button to get an Excel file of the log. Then, please send it as an attachment by email (chenxi.jiang@uzh.ch).
+
+--- **Here is important** ---
+
+For more functions:
+- On the "Home" page, "clicking the same button" can stop the current record. You can also "Cancel" the record if it is incorrect. The "Restart" button clears all cache and data.
+- On the "Log" page, you can edit your log by adding or deleting a record. If you think the record is incorrect, please correct them!
+- On the "Scenario" page, you can change the scenario once or create your own scenario (please follow the design protocol).
 
 If you have any problem, do not hesitate to contact me! :)
+
+Enjoy your journey here!
+
+Email: chenxi.jiang@uzh.ch
 
 ---
 
 **Thank you for your valuable contribution!**
+
+(swipe up, and you will see an "X" button in the upper left to close the window)
+
             `;
             document.getElementById("markdown-content").innerHTML = marked.parse(markdown);
             }
@@ -570,6 +748,34 @@ If you have any problem, do not hesitate to contact me! :)
             function closePopup() {
                 document.getElementById('popupOverlay').style.display = 'none';
                 document.getElementById('popup').style.display = 'none';
+
+                if(freshman==0){
+                    setTimeout(()=>{
+                        var name = prompt("Please input your name:");
+                        while(!name){
+                            name = prompt("Please input a valid name:");
+                        }
+                        if (name){
+                            while (!confirm(`Are you ${name}?`)){
+                            prompt("Please input your name:");
+                            }
+                        }
+
+                        recordName = name;
+                        document.getElementById("nameInput").value = name;
+                        saveNameToLocalStorage();
+                        nameInput.disabled = true;
+                        nameConfirmButton.disabled = true;
+
+                        setTimeout(()=>{
+                            alert("Then please have a look at your scenario!");
+                            showPage('page3');
+                        },500)
+
+                        //freshman = 1;
+
+                    },500);
+                }
             }
 
             ///////////////
@@ -651,7 +857,7 @@ If you have any problem, do not hesitate to contact me! :)
                     const allChecked = document.querySelectorAll('.todo-checkbox:checked').length === todos.length;
                     if (allChecked) {
                         setTimeout(() => {
-                            alert("Congratulation! You completed the data collection, thank you very much! Now please export the log and send to the aassigned mail address.");
+                            alert("Congratulation! You completed the data collectio! Now please go to 'Log' page, export the log and send to Chenxi's mail address.");
                         }, 300);
                     }
                 });
@@ -678,7 +884,7 @@ If you have any problem, do not hesitate to contact me! :)
         }
 
         randomTodoListButton.addEventListener("click", function() {
-            console.log("Button clicked!");
+            //console.log("Button clicked!");
             if (!random_buttonClicked) {
                 if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
                     changeRandomButtonColor();
@@ -690,7 +896,61 @@ If you have any problem, do not hesitate to contact me! :)
             }
         });
 
+        function createScenario(){
+            alert("When creating your scenario, please follow design protocol as below.\n1. Your scenario should include indoors, outdoors, and semi-indoors environment.\n2. Please remain in a task for at least 5 minutes.")
 
+            const todoListContainer = document.getElementById("todoListContainer");
+            todoListContainer.innerHTML = "";
+
+            const titleInput = document.createElement("input");
+            titleInput.id = "scenarioTitle";
+            titleInput.className = "scenario-item-container";
+            titleInput.placeholder = "Scenario Name";
+            todoListContainer.appendChild(titleInput);
+
+            const itemsContainer = document.createElement("div");
+            itemsContainer.id = "itemsContainer";
+            todoListContainer.appendChild(itemsContainer);
+
+            const addItemButton = document.createElement("button");
+            addItemButton.textContent = "Add plan";
+            addItemButton.addEventListener("click", () => {
+                const itemContainer = document.createElement("div");
+                itemContainer.className = "scenario-item-container";
+                const itemInput = document.createElement("input");
+                itemInput.className = "scenario-item";
+                itemInput.placeholder = "Plan";
+                itemContainer.appendChild(itemInput);
+                itemsContainer.appendChild(itemContainer);
+            });
+
+            const saveScenarioButton = document.createElement("button");
+            saveScenarioButton.textContent = "Save Scenario";
+            saveScenarioButton.addEventListener("click", () => {
+                const title = document.getElementById("scenarioTitle").value;
+                const itemInputs = document.querySelectorAll(".scenario-item");
+                todos = Array.from(itemInputs)
+                    .map(input => input.value.trim())
+                    .filter(value => value !== "")
+                    .map(value => ({
+                        text: value,
+                        completed: false
+                }));
+                
+                if ((title !== "") && todos.length > 0) {
+                    renderTodoList(todos, title);}
+                else {
+                    alert("Please input the title and your plan!")
+                }
+
+            });
+
+            const buttonContainer = document.createElement("div");
+            buttonContainer.id = "buttonContainer_small";
+            todoListContainer.appendChild(buttonContainer);
+            buttonContainer.appendChild(addItemButton);
+            buttonContainer.appendChild(saveScenarioButton);
+        }
 
         ///////
 
@@ -820,6 +1080,13 @@ If you have any problem, do not hesitate to contact me! :)
                 if(random_buttonClicked){
                     changeRandomButtonColor();
                 }
+                setTimeout(()=>{
+                    if(freshman==0){
+                        alert("Please confirm your scenario and the tasks, when you are ready, go back to the 'Home' page, press 'Start' and choose your first label! ;)")
+                        freshman=1;
+                        freshmanToLocalStorage();
+                    }
+                }, 500)  
             }
         }
         
@@ -835,7 +1102,8 @@ If you have any problem, do not hesitate to contact me! :)
         }*/
 
         function setSortDateTime(date, time) {
-            const [month, day, year] = date.split('/');
+            const [day, month, year] = date.split('/');
+            console.log(new Date(`${year}-${month}-${day}T${time}`));
             return new Date(`${year}-${month}-${day}T${time}`);
         }
 
@@ -846,7 +1114,7 @@ If you have any problem, do not hesitate to contact me! :)
                 return dateTimeA - dateTimeB;
             });
 
-            var tableContent = "<table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
+            var tableContent = "<div class='table-container'><table><tr><th>Name</th><th>Id</th><th>Label</th><th>Date</th><th>Time</th><th>TimeZone</th><th>Note</th></tr>";
             buttonLogs.forEach(function(log, index) {
                 //var rowClass = index === 0 ? "class='example-row'" : "";
                 //var rowClass = log.isNewRecord ? "class='new-record-row'" : "";
@@ -858,7 +1126,7 @@ If you have any problem, do not hesitate to contact me! :)
                 }
                 tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
             });
-            tableContent += "</table>";
+            tableContent += "</table></div>";
             document.getElementById('logTable').innerHTML = tableContent;
             saveLogToLocalStorage();
         }
@@ -873,10 +1141,35 @@ If you have any problem, do not hesitate to contact me! :)
                 addRecord();
                 button.innerText = 'Save';
                 button.style.backgroundColor = '#1576ff';
+                document.getElementById('logpageNote').textContent = "To save record, please select label and time.";
             } else {
                 saveRecord();
                 button.innerText = 'Add record';
                 button.style.backgroundColor = ''; 
+                document.getElementById('logpageNote').textContent = "";
+            }
+        }
+
+        function toggleStartOrEndButton(){
+            var button = document.getElementById('startOrEndButton');
+            if (button.innerText === 'Start'){
+                alert("Data collection starts!")
+                button.innerText = 'End';
+                button.style.backgroundColor = '#999999';
+                button.style.border = '4px solid #ccc';
+                //var starttime = getCurrentTime()
+                getStartTime();
+                console.log(startTime);
+            } else {
+                alert("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")
+                button.innerText = 'Start';
+                button.style.backgroundColor = ''; 
+                button.style.border = '';
+                localStorage.removeItem("startTimeKey");
+                //startTime = null;
+                document.getElementById('startTime').textContent = '';
+                getEndTime();
+                console.log(endTime);
             }
         }
 
@@ -884,15 +1177,32 @@ If you have any problem, do not hesitate to contact me! :)
             var button = document.getElementById('deleteRecordButton');
             if (button.innerText === 'Delete record') {
                 if (!recordName){
-                    alert("Please input your name at 'Home' page first :)");
+                    alert("Please input your name on the 'Home' page first :)");
                     return;
                 }
                 deleteRecord();
                 button.innerText = 'Deleting...';
-                button.style.backgroundColor = '#1576ff';
+                button.style.backgroundColor = '#f3d157';
+                document.getElementById('logpageNote').textContent = "Your are in deletion mode now!";
             } else {
                 renderLogs();
                 button.innerText = 'Delete record';
+                button.style.backgroundColor = ''; 
+                document.getElementById('logpageNote').textContent = "";
+            }
+        }
+
+        function toggleButton_scenario() {
+            var button = document.getElementById('createScenarioButton');
+            if (button.innerText === 'Create a Scenario') {
+                createScenario();
+                button.innerText = 'Cancel creating';
+                button.style.backgroundColor = '#f3d157';
+            } else {
+                var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
+                var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
+                renderTodoList(storedTodos,storedTodosTile);
+                button.innerText = 'Create a Scenario';
                 button.style.backgroundColor = ''; 
             }
         }
@@ -1054,6 +1364,7 @@ If you have any problem, do not hesitate to contact me! :)
             rows.forEach(function(row, index) {
                 if (index > 1) {
                     row.addEventListener('click', function() {
+                        raw_classlist = Array.from(this.classList); //obtain original classlist name (may be more than one class)
                         this.classList = '';
                         this.classList.add('selected-row');
                         var rowIndex = this.getAttribute('data-index');
@@ -1065,6 +1376,8 @@ If you have any problem, do not hesitate to contact me! :)
                                 listenRecordClick();
                             }else{
                                 this.classList.remove('selected-row');
+                                console.log(raw_classlist)
+                                this.classList.add(raw_classlist);
                             }
                         }, 150);
                     });
@@ -1109,29 +1422,29 @@ If you have any problem, do not hesitate to contact me! :)
             buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note, isNewRecord: false });
         }
 
-        function createCsvBlob() {
-            let csvContent = "Name,ButtonId,buttonLabel,Time,Note\n";
-            buttonLogs.forEach(function(log) {
-                csvContent += log.name + "," + log.buttonId + "," + log.buttonLabel + "," + log.time + "," + log.note + "\n";
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-            return URL.createObjectURL(blob);
-        }
-
-        function exportLogs() {
+        /*function exportLogs() {
             if (!recordName) {
                 alert("Please enter your name before exporting!");
                 return;
             }
+            
             var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
+
+            var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
+            var end_time = JSON.parse(window.localStorage.getItem("endTimeKey")) ? JSON.parse(window.localStorage.getItem("endTimeKey")) : getEndTime();
+            var scenario_title = JSON.parse(window.localStorage.getItem("todosTitleKey")) ? JSON.parse(window.localStorage.getItem("todosTitleKey")) : null;
+            var todosText = JSON.parse(window.localStorage.getItem("todosKey")) ? JSON.parse(window.localStorage.getItem("todosKey")) : null;
+            todosText = todosText.map(todo => todo.text);
+            scenario_todos = todosText.join(", ");
 
             buttonLogs.forEach(function(log) {
                 csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
             });
 
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+            
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
@@ -1140,7 +1453,40 @@ If you have any problem, do not hesitate to contact me! :)
 
             link.click();
             document.body.removeChild(link);
+        } */
+
+        function createCsvBlob() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
+            csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
+
+            var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
+            var end_time = JSON.parse(window.localStorage.getItem("endTimeKey")) ? JSON.parse(window.localStorage.getItem("endTimeKey")) : getEndTime();
+            var scenario_title = JSON.parse(window.localStorage.getItem("todosTitleKey")) ? JSON.parse(window.localStorage.getItem("todosTitleKey")) : null;
+            var todosText = JSON.parse(window.localStorage.getItem("todosKey")) ? JSON.parse(window.localStorage.getItem("todosKey")) : null;
+            todosText = todosText.map(todo => todo.text);
+            scenario_todos = todosText.join(", ");
+
+            buttonLogs.forEach(function(log) {
+                csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
+            });
+
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            return URL.createObjectURL(blob);
         }
+
+        function exportLogs() {
+            if (!recordName) {
+                alert("Please enter your name before exporting!");
+                return;
+            }
+
+            const blobUrl = createCsvBlob();
+            gonative.share.downloadFile({url: blobUrl});
+        } 
+
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
             if (!recordName) {
@@ -1148,13 +1494,16 @@ If you have any problem, do not hesitate to contact me! :)
                 return;
             }
             if (!todoListIndex) {
-                console.log(todoListIndex)
                 alert("Please have a look at your scenario before logging!");
+                return;
+            }
+            if (!startTime) {
+                alert("Please press 'Start' before logging!");
                 return;
             }
 
             if (selectedButton === buttonId) {
-                if (confirm("Do you want to stop the current status?")) {
+                if (confirm("Do you want to stop the current label?")) {
                     logButtonClick(buttonId, "Stop");
                     selectedButton = null;
                     currentStatus.textContent= "None";
@@ -1166,38 +1515,38 @@ If you have any problem, do not hesitate to contact me! :)
 
             if (selectedButton === null){
                 if (buttonId == 1){
-                    if (!confirm("Do you want to select the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
                     return;
                 }}
                 else if (buttonId === 2){
-                    if (!confirm("Do you want to select the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    if (!confirm("Do you want to select the label?\n\nOutdoor: Activities conducted outside in the open air.")) {
                     return;
                 }}
                 else if (buttonId === 3){
-                    if (!confirm("Do you want to select the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    if (!confirm("Do you want to select the label?\n\nActivities conducted in spaces that are partially enclosed, such as a covered patio, a greenhouse, or a train outside a tunnel.")) {
                     return;
                 }}
                 else if (buttonId === 4){
-                    if (!confirm("Do you want to select the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    if (!confirm("Do you want to select the label?\n\nNot sure: I am not sure which environment it's belongs to.")) {
                     return;
                 }}
             }
 
             if (selectedButton !== null) {
                 if (buttonId == 1){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
                     return;
                 }}
                 else if (buttonId === 2){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nOutdoor: Activities conducted outside in the open air.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nOutdoor: Activities conducted outside in the open air.")) {
                     return;
                 }}
                 else if (buttonId === 3){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
                     return;
                 }}
                 else if (buttonId === 4){
-                    if (!confirm("Current status is ongoing. Do you want to change the status?\n\nNot sure: I am not sure which environment it's belongs to.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nNot sure: I am not sure which environment it's belongs to.")) {
                     return;
                 }}
             }
@@ -1265,7 +1614,7 @@ If you have any problem, do not hesitate to contact me! :)
                 alert("No state now, no need to cancel!")
             }
             else {
-                if(confirm("Do you want to cancel the status?\n\nOnly if you selected a wrong button, you need to cancel it. ")) {
+                if(confirm("Do you want to cancel the label?\n\nOnly if you selected a wrong label, you need to cancel it. ")) {
                     deleteRow(buttonLogs.length - 1);
                     //logButtonClick(selectedButton, "Cancel");
                     selectedButton = null;
@@ -1275,10 +1624,18 @@ If you have any problem, do not hesitate to contact me! :)
                 }
         });
 
-        document.getElementById("nameInput").addEventListener("change", function() {
+        document.getElementById("nameConfirmButton").addEventListener("click", function() {
+            var nameInput = document.getElementById("nameInput");
+            recordName = nameInput.value;
+            saveNameToLocalStorage(recordName);
+            nameInput.disabled = true;
+            nameConfirmButton.disabled = true;
+        });
+
+        /*document.getElementById("nameInput").addEventListener("change", function() {
             recordName = this.value;
             saveNameToLocalStorage();
-        });
+        });*/
 
         updateTime(); // Initial call to set time immediately
     </script>
