@@ -1422,7 +1422,7 @@ Email: chenxi.jiang@uzh.ch
             buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note, isNewRecord: false });
         }
 
-        /*function exportLogs() {
+        function exportLogs() {
             if (!recordName) {
                 alert("Please enter your name before exporting!");
                 return;
@@ -1453,9 +1453,9 @@ Email: chenxi.jiang@uzh.ch
 
             link.click();
             document.body.removeChild(link);
-        } */
+        } 
 
-        function createCsvBlob() {
+        /*function createCsvBlob() {
             var csvContent = "data:text/csv;charset=utf-8,";
             csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
@@ -1485,7 +1485,7 @@ Email: chenxi.jiang@uzh.ch
 
             const blobUrl = createCsvBlob();
             gonative.share.downloadFile({url: blobUrl});
-        } 
+        } */
 
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
