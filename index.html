@@ -1422,18 +1422,7 @@ Email: chenxi.jiang@uzh.ch
             buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note, isNewRecord: false });
         }
 
-        function createCsvBlob() {
-            let csvContent = "Name,ButtonId,buttonLabel,Time,Note\n";
-            buttonLogs.forEach(function(log) {
-                csvContent += log.name + "," + log.buttonId + "," + log.buttonLabel + "," + log.time + "," + log.note + "\n";
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-            return URL.createObjectURL(blob);
-        }
-
-        function exportLogs() {
+        /*function exportLogs() {
             if (!recordName) {
                 alert("Please enter your name before exporting!");
                 return;
@@ -1464,13 +1453,40 @@ Email: chenxi.jiang@uzh.ch
 
             link.click();
             document.body.removeChild(link);
+        } */
+
+        function createCsvBlob() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
+            csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
+
+            var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
+            var end_time = JSON.parse(window.localStorage.getItem("endTimeKey")) ? JSON.parse(window.localStorage.getItem("endTimeKey")) : getEndTime();
+            var scenario_title = JSON.parse(window.localStorage.getItem("todosTitleKey")) ? JSON.parse(window.localStorage.getItem("todosTitleKey")) : null;
+            var todosText = JSON.parse(window.localStorage.getItem("todosKey")) ? JSON.parse(window.localStorage.getItem("todosKey")) : null;
+            todosText = todosText.map(todo => todo.text);
+            scenario_todos = todosText.join(", ");
+
+            buttonLogs.forEach(function(log) {
+                csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
+            });
+
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            return URL.createObjectURL(blob);
         }
 
-        /*function exportLogs(){
+        function exportLogs() {
+            if (!recordName) {
+                alert("Please enter your name before exporting!");
+                return;
+            }
 
-            //const blobUrl = createCsvBlob();
-            //gonative.share.downloadFile({url: blobUrl});
-        }*/
+            const blobUrl = createCsvBlob();
+            gonative.share.downloadFile({url: blobUrl});
+        } 
+
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
             if (!recordName) {
