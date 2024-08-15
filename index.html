@@ -119,11 +119,21 @@
         }
 
         #startOrEndButton {
+            display: flex;
+            justify-content: space-around;
+            background-color: #000;
+            color: #fff;
             width:100px;
             height:100px;
+            position: fixed;
+            bottom: 0;
+            left: auto;
+            right: 15px;
+            z-index: 1000;
             background:rgb(222, 32, 32);
             color:#fff;
-            border:none;
+            opacity: 0.9;
+            border:4px solid #ea4141;
             border-radius:50%;
             margin-bottom: 60px;
         }
@@ -342,8 +352,14 @@
         }
 
         #exportIcon {
-            width: 24px; 
-            height: 24px; 
+            width: 25px; 
+            height: 25px; 
+            margin-right: 5px; 
+        }
+
+        #exportIcon2 {
+            width: 35px; 
+            height: 35px; 
             margin-right: 5px; 
         }
 
@@ -351,6 +367,13 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 500; 
             font-size: 15px;
+            color: #000;
+        }
+
+        #exportText2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800; 
+            font-size: 18px;
             color: #000;
         }
 
@@ -462,7 +485,7 @@
 
         <div id="timeDisplay"><span id="currentTimeLabel">Start Time:</span> <span id="startTime">--:--:--</span></div>
         <div id="timeDisplay"><span id="currentTimeLabel">Current Time:</span> <span id="currentTime">--:--:--</span></div>
-        <div id="statusDisplay"><span id="currentStatusLabel">Current Label: </span> <span id="currentStatus">You has no label, please choose one!</span></div>
+        <div id="statusDisplay"><span id="currentStatusLabel">Current Label: </span> <span id="currentStatus">You have no label, please choose one!</span></div>
         <img id="statusImage" src="" alt="Status Image">
         <button id="button1"><img src="images/indoor.svg" class="icon" alt="Indoor Icon">Indoor</button>
         <button id="button2"><img src="images/outdoor.svg" class="icon" alt="Outdoor Icon">Outdoor</button>
@@ -475,8 +498,8 @@
 
     <div id="page2" class="content">
         <div id="exportContainer" onclick="exportLogs()">
-            <img id="exportIcon" src="images/export2.svg" alt="Export Icon">
-            <span id="exportText">Export</span>
+            <img id="exportIcon2" src="images/export2.svg" alt="Export Icon">
+            <span id="exportText2">Export</span>
         </div>
         <h2>Log Table</h2>
         <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">You can edit your label records here, please check your recordsbefore exporting.
@@ -524,14 +547,14 @@
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
-                { title: "Irchel Campus Scenario 1", items: ["1.Start outdoors in the courtyard", "2.Enter the teaching building and walk into a room staying for >8 minutes", "3.Sit by the window for 5-8 minutes", "4.Walk to the garden between buildings and stay for 5-8 minutes", "5.Walk to the library staying for 5-8 minutes", "6.Walk in Irchel Park for 5-8 minutes"] },
-                { title: "Train Station Scenario", items: ["1.Depart from the central train station", "2.Walk through Bahnhofstrasse to Globus", "3 Browse at least four stores in the mall satying 5-8 minutes in each", "4. Stay near the windows for 5-8 minutes before leaving.", "5.Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes"] },
-                { title: "Central Campus Scenario", items: ["1.Start at center campus", "2.Saty at lounge area for >8minutes", "3.Entering a classroom and staying >8minutes", "4.Leave the building and walk to take Polyban", "5.Have a walk in the alley", "6.Have a walk along the Limmatquai"] },
-                { title: "Garden Scenario", items: ["1.Start at outside garden", "2.Stay there for 5-8 minutes", "3.Saty inside the house>8 minutes", "4.Stay under the eaves for 5-8 minutes", "5. Walk to the community center and satying for 5-8 minutes","*6.Walk to nearby gym and satying for 5-8 minutes"] },
-                { title: "Irchel Campus Scenario 2", items: ["1.Start at Irchel campus", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes", "3.Walk into the cafeteria and stay for 5-8 minutes", "4.Walk to 'Lichthof' and sit there for 5-8 minutes", "5.Get into your office room and stay for 5-8 minutes"] },
-                { title: "Central Scenario", items: ["1.Start at a nearby open area", "2.Stay under the station's glass roof for 5 minutes", "3.Take tram 9 to Bellevue", "4. Get off the tram and walk to train station Stadelhofen", "5.Hop on a train to Zurich HB (sit on the lower floor)", "6.Get off the train and stay on the ground floor of Zurich HB"] },
-                { title: "Tram 7 Scenario", items: ["1.Start from Milchbuck", "2.Take tram 7 to Schwamendingerplatz", "3.Get off the tram and enter Coop", "4.Stay inside for 5-8 minutes", "5.Enter Migros and stay inside for 5-8 minutes", "6.Leave Schwamendingerplatz by tram"] },
-                { title: "City Central Shopping Scenario", items: ["1.Start at Zurich Hb", "2.Walk along Bahnhofstrasse towards Rennweg", "3.Enter 2-3 shops on your way (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4.Board the tram at Rennweg till Bürkliplatz", "5.Have a 5-minute walk along the lake"] }
+            { title: "Irchel Campus Scenario 1", items: ["1. Start outdoors in the courtyard (outdoor)", "2. Enter the teaching building and walk into a room staying for >8 minutes (indoor)", "3. Sit by the window for 5-8 minutes (semi-indoor)", "4. Walk to Medizinerhof between buildings and stay for 5-8 minutes (semi-indoor)", "5. Walk to the library staying for 5-8 minutes (indoor)", "6. Walk in the Irchel Park for 5-8 minutes (outdoor)"] },
+{ title: "Train Station Scenario", items: ["1. Depart from the central train station (outdoor)", "2. Walk through Bahnhofstrasse to Globus (outdoor)", "3 Browse at least four stores in the mall staying 5-8 minutes in each (indoor)", "4. Stay near the windows for 5-8 minutes before leaving. (semi-indoor)", "5. Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes (indoor)"] },
+{ title: "Central Campus Scenario", items: ["1. Start at central campus", "2. Stay at the  Lichthof for > 8 minutes (semi-indoor)", "3. Enter a classroom and stay for > 8minutes (indoor)", "4. Leave the building and walk to take Polyban (outdoor)", "5. Take a walk in the alley (semi-indoor)", "6. Take a walk along the Limmatquai (outdoor)"] },
+{ title: "Garden Scenario", items: ["1. Start outside in the garden and stay there for 5-8 minutes (outdoor)", "2. Stay inside the house > 8 minutes (indoor)", "3. Stay under the eaves for 5-8 minutes (semi-indoor)", "4. Walk to the community center and stay there for 5-8 minutes (outdoor, indoor)","(optional)5. Walk to a nearby gym and stay for 5-8 minutes (indoor)"] },
+{ title: "Irchel Campus Scenario 2", items: ["1. Start at Irchel campus (outdoor)", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes (semi-indoor)", "3. Walk into (outdoor) the cafeteria and stay for 5-8 minutes (indoor)", "4. Walk to 'Lichthof' and sit there for 5-8 minutes (semi-indoor)", "5. Get into your office room and stay for 5-8 minutes (indoor)"] },
+{ title: "Central Scenario", items: ["1. Start at an open area on or near 'Central' square (outdoor)", "2. Stay under the station's glass roof for 5 minutes (semi-indoor)", "3. Take tram to Bellevue (semi-indoor)", "4. Get off the tram and walk to the train station Stadelhofen (outdoor)", "5. Hop on a train to Zurich HB (indoor)", "6. Get off the train and stay on the ground floor of Zurich HB (semi-indoor)"] },
+{ title: "Tram 7 Scenario", items: ["1. Start from Milchbuck", "2. Take tram 7 to Schwamendingerplatz (indoor)", "3. Get off the tram and enter Coop (indoor)", "4. Stay inside for 5-8 minutes", "5. Enter Migros and stay inside for 5-8 minutes (indoor)", "6. Leave Schwamendingerplatz by tram (semi-indoor)"] },
+{ title: "City Center Shopping Scenario", items: ["1. Start at Zurich HB", "2. Walk along Bahnhofstrasse towards Rennweg (outdoor)", "3. Enter 2-3 shops on your way (indoor) (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4. Board the tram at Rennweg till Bürkliplatz (semi-indoor)", "5. Take a 5-minute walk along the lake (outdoor)"] }
             ];
 
             const todoListContainer = document.getElementById("todoListContainer");
@@ -541,6 +564,7 @@
             let todoListTitle = null;
             let freshman = 0;
             let startTime = null;
+            let endTime = null;
 
             window.onload = function() {
                 showPage('page1');
@@ -592,6 +616,16 @@
                 var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
                 document.getElementById('startTime').textContent = dateTimeString;
                 window.localStorage.setItem("startTimeKey", JSON.stringify(dateTimeString));
+                startTime=dateTimeString;
+            }
+
+            function getEndTime(){
+                var now = new Date();
+                var dateString = now.toLocaleDateString('en-GB');
+                var timeString = now.toLocaleTimeString('en-GB');
+                var timeZoneString = now.toLocaleTimeString('en-US', {timeZoneName: 'short' }).split(' ')[2];
+                var dateTimeString = dateString + ' ' + timeString + ' ' + timeZoneString;
+                endTime=dateTimeString;
             }
 
                 
@@ -634,7 +668,7 @@
             }
 
             function restart(){
-                if(confirm("Do you decide to restart the experiment? If do so, you will LOSE ALL DATA.")){
+                if(confirm("Do you decide to restart the experiment? If do so, you will LOSE ALL DATA. If you completed a data collection, please EXPORT the log first!")){
                     if(confirm("Again :) Are you sure to delete all data logged?")){
                         localStorage.removeItem("nameKey");
                         localStorage.removeItem("logKey");
@@ -664,16 +698,15 @@ Thank you for participating in my research! **If you are new here, please read t
 
 My research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data.
 
-"Label Logger" is an labeling APP for "uTrail" device. The goal is to add environment label when recording "uTrail" data. When data collection begions, you need to specify which kind of environment you are and choose the label. Also you need to change the label in time when changing environment.
+"Label Logger" is a labeling APP for the "uTrail" device. The goal is to add environment labels when recording "uTrail" data. When data collection begins, you need to specify which kind of environment you are in and choose the corresponding label. Also, you need to change the label in time when changing the environment (e.g. from indoor to outdoor).
 
-In this resarch, I classify the environment to three different types (three environment labels), the definitions are as follows.
+In this research, I classify the environment to three different types (three environment labels), the definitions are as follows.
 
-**Indoor**: Activities conducted inside a building or enclosed space.
+**Indoor**: Activities conducted inside a building, enclosed space, or train in a tunnel.
 
 **Outdoor**: Activities conducted outside in the open air.
 
-**Semi-Indoor**: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.
-
+**Semi-Indoor**: Activities conducted in spaces that are partially enclosed, such as a covered patio, a greenhouse, or a train outside a tunnel.
 
 ---
 
@@ -682,18 +715,18 @@ Here is a simple introduction. For a more detailed tutorial, please see the tuto
 
 --- **Here is important** ---
 
-- First, please enter your name (you don't have to use your real name) in "Home" page. Once confirm, name cannot be changed.
-- Next, go to the "Scenario" page, you will see your scenario which is randomly selected. It will give you an general idea where to go and what to do, but you don't need to do it very strictly.
-- Then, when you are ready, let's begin! Go back to "Home" page, press "Start" button and select your first environment label!
-- During the data collection, you wear the "uTrail" device, follow the scenario task and changing environment label when chaning environment.
-- When each data collection is complete, go to "Log" page and click the 'Export' button to get an Excel file of the log. Then, please send it as an attachment by email.
+- First, please enter your name (you don't have to use your real name) in "Home" page. Once confirmed, the name cannot be changed.
+- Next, go to the "Scenario" page, where you will see your scenario which is randomly selected. It will give you a general idea where to go and what to do.
+- Then, when you are ready, let's begin! Go back to the "Home" page, press the "Start" button and select your first environment label!
+- During the data collection, you should wear the "uTrail" device at all times, follow the scenario tasks and change the environment label when changing environment.
+- When each data collection is complete, go to the "Log" page and click the "Export" button to get an Excel file of the log. Then, please send it as an attachment by email (chenxi.jiang@uzh.ch).
 
 --- **Here is important** ---
 
 For more functions:
-- In "Home" page, "clicking the same button" can stop the current record. You can also "Cancel" the record if it is incorrect. The "Restart" button clears all cache and data.
-- In "Log" page, you can edit your log by adding or deleting an record. If you think the record is incorrect, please correct them!
-- In "Scenario" page, you can change scenario once or create your own scenario (please follow the design protocol).
+- On the "Home" page, "clicking the same button" can stop the current record. You can also "Cancel" the record if it is incorrect. The "Restart" button clears all cache and data.
+- On the "Log" page, you can edit your log by adding or deleting a record. If you think the record is incorrect, please correct them!
+- On the "Scenario" page, you can change the scenario once or create your own scenario (please follow the design protocol).
 
 If you have any problem, do not hesitate to contact me! :)
 
@@ -705,7 +738,8 @@ Email: chenxi.jiang@uzh.ch
 
 **Thank you for your valuable contribution!**
 
-(swipe up you will see a "X" button in the upper left to close the window)
+(swipe up, and you will see an "X" button in the upper left to close the window)
+
             `;
             document.getElementById("markdown-content").innerHTML = marked.parse(markdown);
             }
@@ -849,7 +883,7 @@ Email: chenxi.jiang@uzh.ch
         }
 
         randomTodoListButton.addEventListener("click", function() {
-            console.log("Button clicked!");
+            //console.log("Button clicked!");
             if (!random_buttonClicked) {
                 if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
                     changeRandomButtonColor();
@@ -862,7 +896,7 @@ Email: chenxi.jiang@uzh.ch
         });
 
         function createScenario(){
-            alert("When creating your scenario, please follow design protocol as below.\n1. Your scenario should include indoors, outdoors, semi-indoors environment.\n2. Please remain in a scenario for at least 5 minutes.")
+            alert("When creating your scenario, please follow design protocol as below.\n1. Your scenario should include indoors, outdoors, and semi-indoors environment.\n2. Please remain in a task for at least 5 minutes.")
 
             const todoListContainer = document.getElementById("todoListContainer");
             todoListContainer.innerHTML = "";
@@ -1047,7 +1081,7 @@ Email: chenxi.jiang@uzh.ch
                 }
                 setTimeout(()=>{
                     if(freshman==0){
-                        alert("Please confrim your scenario and the tasks, when you are ready, go back to 'Home' page, press 'Start' and choose your first label! ;)")
+                        alert("Please confirm your scenario and the tasks, when you are ready, go back to the 'Home' page, press 'Start' and choose your first label! ;)")
                         freshman=1;
                         freshmanToLocalStorage();
                     }
@@ -1120,13 +1154,20 @@ Email: chenxi.jiang@uzh.ch
                 alert("Data collection starts!")
                 button.innerText = 'End';
                 button.style.backgroundColor = '#999999';
+                button.style.border = '4px solid #ccc';
                 //var starttime = getCurrentTime()
                 getStartTime();
+                console.log(startTime);
             } else {
-                alert("Data collection ends! Please go to 'Log' page and export your log.")
+                alert("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")
                 button.innerText = 'Start';
                 button.style.backgroundColor = ''; 
-                var endtime = getCurrentTime()
+                button.style.border = '';
+                localStorage.removeItem("startTimeKey");
+                //startTime = null;
+                document.getElementById('startTime').textContent = '';
+                getEndTime();
+                console.log(endTime);
             }
         }
 
@@ -1134,7 +1175,7 @@ Email: chenxi.jiang@uzh.ch
             var button = document.getElementById('deleteRecordButton');
             if (button.innerText === 'Delete record') {
                 if (!recordName){
-                    alert("Please input your name at 'Home' page first :)");
+                    alert("Please input your name on the 'Home' page first :)");
                     return;
                 }
                 deleteRecord();
@@ -1397,6 +1438,7 @@ Email: chenxi.jiang@uzh.ch
             }
             
             var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
 
             buttonLogs.forEach(function(log) {
@@ -1421,8 +1463,11 @@ Email: chenxi.jiang@uzh.ch
                 return;
             }
             if (!todoListIndex) {
-                console.log(todoListIndex)
                 alert("Please have a look at your scenario before logging!");
+                return;
+            }
+            if (!startTime) {
+                alert("Please press 'Start' before logging!");
                 return;
             }
 
@@ -1447,7 +1492,7 @@ Email: chenxi.jiang@uzh.ch
                     return;
                 }}
                 else if (buttonId === 3){
-                    if (!confirm("Do you want to select the label?\n\nSemi-Indoor: Activities conducted in spaces that are partially enclosed, such as a covered patio or a greenhouse.")) {
+                    if (!confirm("Do you want to select the label?\n\nActivities conducted in spaces that are partially enclosed, such as a covered patio, a greenhouse, or a train outside a tunnel.")) {
                     return;
                 }}
                 else if (buttonId === 4){
