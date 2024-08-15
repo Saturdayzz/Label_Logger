@@ -1102,7 +1102,8 @@ Email: chenxi.jiang@uzh.ch
         }*/
 
         function setSortDateTime(date, time) {
-            const [month, day, year] = date.split('/');
+            const [day, month, year] = date.split('/');
+            console.log(new Date(`${year}-${month}-${day}T${time}`));
             return new Date(`${year}-${month}-${day}T${time}`);
         }
 
@@ -1463,9 +1464,13 @@ Email: chenxi.jiang@uzh.ch
 
             link.click();
             document.body.removeChild(link);
+        }
+
+        /*function exportLogs(){
+
             //const blobUrl = createCsvBlob();
             //gonative.share.downloadFile({url: blobUrl});
-        }
+        }*/
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
             if (!recordName) {
