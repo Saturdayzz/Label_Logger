@@ -1124,10 +1124,25 @@ Email: chenxi.jiang@uzh.ch
                 } else if (log.isNewRecord) {
                     rowClass = "class='new-record-row'";
                 }
-                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
+                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td class='note-cell'>" + log.note + "</td></tr>";
             });
             tableContent += "</table></div>";
             document.getElementById('logTable').innerHTML = tableContent;
+
+            document.querySelectorAll('.note-cell').forEach(function(cell, index) {
+                cell.addEventListener('dblclick', function() {
+                    cell.style.backgroundColor = 'lightgray';
+                    setTimeout(() => {
+                        var newNote = prompt("Enter a note:", buttonLogs[index].note || "");
+                        if (newNote !== null) {
+                            buttonLogs[index].note = newNote;
+                        }
+                        renderLogs(); // Re-render the table to show the updated note and reset background
+                    }, 50);
+                    
+                });
+            });
+
             saveLogToLocalStorage();
         }
         
