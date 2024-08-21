@@ -913,13 +913,13 @@ Email: chenxi.jiang@uzh.ch
             todoListContainer.appendChild(itemsContainer);
 
             const addItemButton = document.createElement("button");
-            addItemButton.textContent = "Add plan";
+            addItemButton.textContent = "Add task";
             addItemButton.addEventListener("click", () => {
                 const itemContainer = document.createElement("div");
                 itemContainer.className = "scenario-item-container";
                 const itemInput = document.createElement("input");
                 itemInput.className = "scenario-item";
-                itemInput.placeholder = "Plan";
+                itemInput.placeholder = "Task";
                 itemContainer.appendChild(itemInput);
                 itemsContainer.appendChild(itemContainer);
             });
@@ -940,7 +940,7 @@ Email: chenxi.jiang@uzh.ch
                 if ((title !== "") && todos.length > 0) {
                     renderTodoList(todos, title);}
                 else {
-                    alert("Please input the title and your plan!")
+                    alert("Please input the title and your task!")
                 }
 
             });
@@ -1515,7 +1515,7 @@ Email: chenxi.jiang@uzh.ch
 
             if (selectedButton === null){
                 if (buttonId == 1){
-                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building, enclosed space and away from large windows or glass curtain wall.")) {
                     return;
                 }}
                 else if (buttonId === 2){
@@ -1534,7 +1534,7 @@ Email: chenxi.jiang@uzh.ch
 
             if (selectedButton !== null) {
                 if (buttonId == 1){
-                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building, enclosed space and away from large windows or glass curtain wall.")) {
                     return;
                 }}
                 else if (buttonId === 2){
