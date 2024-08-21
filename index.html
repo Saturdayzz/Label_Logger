@@ -502,7 +502,7 @@
             <span id="exportText2">Export</span>
         </div>
         <h2>Log Table</h2>
-        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">You can edit your label records here, please check your recordsbefore exporting.
+        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">- You can edit your label records here, please check your recordsbefore exporting. <br>- You can add note by DOUBLE clicking note cell.
         </div>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
@@ -580,7 +580,7 @@
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
-
+                //selectedButton = JSON.parse(window.localStorage.getItem("selectedbuttonKey")) ? JSON.parse(window.localStorage.getItem("selectedbuttonKey")) : selectedButton; 
                 var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : false;
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
@@ -679,6 +679,7 @@
                         localStorage.removeItem("clickKey");
                         localStorage.removeItem("freshmanKey");
                         localStorage.removeItem("startTimeKey");
+                        localStorage.removeItem("selectedbuttonKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -913,13 +914,13 @@ Email: chenxi.jiang@uzh.ch
             todoListContainer.appendChild(itemsContainer);
 
             const addItemButton = document.createElement("button");
-            addItemButton.textContent = "Add plan";
+            addItemButton.textContent = "Add task";
             addItemButton.addEventListener("click", () => {
                 const itemContainer = document.createElement("div");
                 itemContainer.className = "scenario-item-container";
                 const itemInput = document.createElement("input");
                 itemInput.className = "scenario-item";
-                itemInput.placeholder = "Plan";
+                itemInput.placeholder = "Task";
                 itemContainer.appendChild(itemInput);
                 itemsContainer.appendChild(itemContainer);
             });
@@ -940,7 +941,7 @@ Email: chenxi.jiang@uzh.ch
                 if ((title !== "") && todos.length > 0) {
                     renderTodoList(todos, title);}
                 else {
-                    alert("Please input the title and your plan!")
+                    alert("Please input the title and your task!")
                 }
 
             });
@@ -1124,10 +1125,25 @@ Email: chenxi.jiang@uzh.ch
                 } else if (log.isNewRecord) {
                     rowClass = "class='new-record-row'";
                 }
-                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td>" + log.note + "</td></tr>";
+                tableContent += "<tr " + rowClass + " data-index='" + index + "'><td>" + log.name + "</td><td>" + log.buttonId + "</td><td>" + log.buttonLabel + "</td><td>" + log.date+ "</td><td>"+ log.time + "</td><td>"+ log.timeZone + "</td><td class='note-cell'>" + log.note + "</td></tr>";
             });
             tableContent += "</table></div>";
             document.getElementById('logTable').innerHTML = tableContent;
+
+            document.querySelectorAll('.note-cell').forEach(function(cell, index) {
+                cell.addEventListener('dblclick', function() {
+                    cell.style.backgroundColor = 'lightgray';
+                    setTimeout(() => {
+                        var newNote = prompt("Enter a note:", buttonLogs[index].note || "");
+                        if (newNote !== null) {
+                            buttonLogs[index].note = newNote;
+                        }
+                        renderLogs(); // Re-render the table to show the updated note and reset background
+                    }, 50);
+
+                });
+            });
+
             saveLogToLocalStorage();
         }
         
@@ -1429,7 +1445,7 @@ Email: chenxi.jiang@uzh.ch
             }
             
             var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
+            //csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
 
             var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
@@ -1443,7 +1459,8 @@ Email: chenxi.jiang@uzh.ch
                 csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
             });
 
-            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}\n`;
+            csvContent += `Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
             
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
@@ -1457,7 +1474,6 @@ Email: chenxi.jiang@uzh.ch
 
         function createCsvBlob() {
             var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
 
             var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
@@ -1471,8 +1487,9 @@ Email: chenxi.jiang@uzh.ch
                 csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
             });
 
-            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
-            
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}\n`;
+            csvContent += `Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             return URL.createObjectURL(blob);
         }
@@ -1506,7 +1523,7 @@ Email: chenxi.jiang@uzh.ch
                 if (confirm("Do you want to stop the current label?")) {
                     logButtonClick(buttonId, "Stop");
                     selectedButton = null;
-                    currentStatus.textContent= "None";
+                    currentStatus.textContent= "You have no label, please choose one!";
                     statusImage.style.display = "none";
                     resetButtonStates();
                 }
@@ -1515,7 +1532,7 @@ Email: chenxi.jiang@uzh.ch
 
             if (selectedButton === null){
                 if (buttonId == 1){
-                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Do you want to select the label?\n\nIndoor: Activities conducted inside a building, enclosed space and away from large windows or glass curtain wall.")) {
                     return;
                 }}
                 else if (buttonId === 2){
@@ -1534,7 +1551,7 @@ Email: chenxi.jiang@uzh.ch
 
             if (selectedButton !== null) {
                 if (buttonId == 1){
-                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building or enclosed space.")) {
+                    if (!confirm("Current label is ongoing. Do you want to change the label?\n\nIndoor: Activities conducted inside a building, enclosed space and away from large windows or glass curtain wall.")) {
                     return;
                 }}
                 else if (buttonId === 2){
