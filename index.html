@@ -513,10 +513,10 @@
 
     <div id="page3" class="content">
         <h2>Embark on Your Data Journey!</h2>
-        <sapn style="font-size: 15px;color: rgb(0, 0, 0);">- Please read and select your scenario before start, and follow the tasks after starting. <br> - Excluding the choice of scenario, actions in this page won't be recorded.<br> - Each task may contain more than one transitions, and the label in bracket is only as reference.
+        <sapn style="font-size: 15px;color: rgb(0, 0, 0);">- Please read and select your scenario before start, and follow the tasks after starting. <br> - Please follow the same scenario for each data collection. <br> - Excluding the choice of scenario, actions in this page won't be recorded.<br> - Each task may contain more than one transitions, and the label in bracket is only as reference.
         </sapn>
         <div id="buttonContainer">
-            <button id="randomTodoListButton">Change Scenario</button>
+            <button id="randomTodoListButton">Select Scenario</button>
             <button id="createScenarioButton" onclick="toggleButton_scenario()">Create a Scenario</button>
         </div>
         
@@ -547,15 +547,15 @@
     
         //document.addEventListener("DOMContentLoaded", function() {
             const todoLists = [
-            { title: "Irchel Campus Scenario 1", items: ["1. Start outdoors in the courtyard (outdoor)", "2. Enter the teaching building and walk into a room staying for >8 minutes (indoor)", "3. Sit by the window for 5-8 minutes (semi-indoor)", "4. Walk to Medizinerhof between buildings and stay for 5-8 minutes (semi-indoor)", "5. Walk to the library staying for 5-8 minutes (indoor)", "6. Walk in the Irchel Park for 5-8 minutes (outdoor)"] },
-            { title: "Train Station Scenario", items: ["1. Depart from the central train station (outdoor)", "2. Walk through Bahnhofstrasse to Globus (outdoor)", "3 Browse at least four stores in the mall staying 5-8 minutes in each (indoor)", "4. Stay near the windows for 5-8 minutes before leaving. (semi-indoor)", "5. Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes (indoor)"] },
-            { title: "Central Campus Scenario", items: ["1. Start at central campus", "2. Stay at the  Lichthof for > 8 minutes (semi-indoor)", "3. Enter a classroom and stay for > 8minutes (indoor)", "4. Leave the building and walk to take Polyban (outdoor)", "5. Take a walk in the alley (semi-indoor)", "6. Take a walk along the Limmatquai (outdoor)"] },
-            { title: "Garden Scenario", items: ["1. Start outside in the garden and stay there for 5-8 minutes (outdoor)", "2. Stay inside the house > 8 minutes (indoor)", "3. Stay under the eaves for 5-8 minutes (semi-indoor)", "4. Walk to the community center and stay there for 5-8 minutes (outdoor, indoor)","(optional)5. Walk to a nearby gym and stay for 5-8 minutes (indoor)"] },
-            { title: "Irchel Campus Scenario 2", items: ["1. Start at Irchel campus (outdoor)", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes (semi-indoor)", "3. Walk into (outdoor) the cafeteria and stay for 5-8 minutes (indoor)", "4. Walk to 'Lichthof' and sit there for 5-8 minutes (semi-indoor)", "5. Get into your office room and stay for 5-8 minutes (indoor)"] },
-            { title: "Central Scenario", items: ["1. Start at an open area on or near 'Central' square (outdoor)", "2. Stay under the station's glass roof for 5 minutes (semi-indoor)", "3. Take tram to Bellevue (semi-indoor)", "4. Get off the tram and walk to the train station Stadelhofen (outdoor)", "5. Hop on a train to Zurich HB (indoor)", "6. Get off the train and stay on the ground floor of Zurich HB (semi-indoor)"] },
-            { title: "Tram 7 Scenario", items: ["1. Start from Milchbuck", "2. Take tram 7 to Schwamendingerplatz (indoor)", "3. Get off the tram and enter Coop (indoor)", "4. Stay inside for 5-8 minutes", "5. Enter Migros and stay inside for 5-8 minutes (indoor)", "6. Leave Schwamendingerplatz by tram (semi-indoor)"] },
-            { title: "City Center Shopping Scenario", items: ["1. Start at Zurich HB", "2. Walk along Bahnhofstrasse towards Rennweg (outdoor)", "3. Enter 2-3 shops on your way (indoor) (e.g., Lindt chocolate, clothing stores), stay 5-8 minutes in each shop", "4. Board the tram at Rennweg till Bürkliplatz (semi-indoor)", "5. Take a 5-minute walk along the lake (outdoor)"] }
-                        ];
+            { title: "Irchel Campus Scenario 1", items: ["1. Start outdoors in the courtyard (outdoor), wait until uTrail light turn green", "2. Enter a teaching building and walk into a room staying for 5-8 minutes (indoor)", "3. Sit by the window for 5-8 minutes (semi-indoor)", "4. Walk to Medizinerhof between buildings and stay for 5-8 minutes (semi-indoor)", "5. Walk to the library staying for 5-8 minutes (indoor)", "6. Walk in the Irchel Park for 5-8 minutes (outdoor)"] },
+            { title: "Irchel Campus Scenario 2", items: ["1. Start at Irchel campus (outdoor), wait until uTrail light turn green", "2. Walk to Irchel bar and stay under the roof for 5-8 minutes (semi-indoor)", "3. Walk into (outdoor) the cafeteria and stay for 5-8 minutes (indoor)", "4. Walk to 'Lichthof' and stay there for 5-8 minutes (semi-indoor)", "5. Get into your office room and stay for 5-8 minutes (indoor)"] },
+            { title: "City Center Scenario 1", items: ["1. Start at Zurich HB (outdoor), wait until uTrail light turn green", "2. Walk through Bahnhofstrasse to Globus (semi-indoor / outdoor)", "3 Browse 3-4 stores in the mall staying 5-8 minutes in each (indoor)", "4. Stay near the windows / glass curtain for 5-8 minutes (semi-indoor)", "5. Leave Globus and go to Coop‘s supermarket floor staying 5-8 minutes (indoor)"] },
+            { title: "City Center Scenario 2", items: ["1. Start at Zurich HB (outdoor), wait until uTrail light turn green", "2. Walk along Bahnhofstrasse towards Rennweg (outdoor)", "3. Enter 2-3 shops on your way (indoor) (e.g., Läderach, Rituals), stay 5-8 minutes in each shop", "4. Board the tram 11 at Rennweg till Bürkliplatz (semi-indoor)", "5. Take a 5-8 minutes walk along the lake (outdoor)"] },
+            { title: "Central Campus Scenario", items: ["1. Start at central campus (outdoor), wait until uTrail light turn green", "2. Stay at the  Lichthof for 5-8 minutes (semi-indoor)", "3. Enter a classroom and stay for 5-8minutes (indoor)", "4. Leave the building and walk to take Polyban (outdoor, semi-indoor)", "5. Have a walk along Niederdorfstrasse (semi-indoor)", "6. Have a walk along the Limmatquai (outdoor)"] },
+            { title: "Train Station Scenario", items: ["1. Start at an open area near 'Central' square (outdoor), wait until uTrail light turn green", "2. Stay under the station's roof for 5 minutes (semi-indoor)", "3. Take tram to Bellevue (semi-indoor)", "4. Get off the tram and walk to the train station Stadelhofen (outdoor, semi-indoor)", "5. Hop on a train to Zurich HB (indoor)", "6. Get off the train and stay on the underground floor of Zurich HB for 5-8 minutes","7. Stay on the ground floor of Zurich HB for 5-8 minutes (semi-indoor)"] },
+            { title: "Tram 7 Scenario", items: ["1. Start from Milchbuck (outdoor), wait until uTrail light turn green", "2. Take tram 7 to Schwamendingerplatz (semi-indoor, indoor)", "3. Get off the tram, enter Coop and stay inside Coop for 5-8 minutes (semi-indoor, indoor)", "4. Leave Coop and walk to Migros (outdoor)", "5. Enter Migros and stay inside for 5-8 minutes (indoor)", "6. Take tram 7 to Stettbach (semi-indoor)"] },
+            { title: "Single Family Scenario", items: ["1. Start outside (outdoor), wait until uTrail light turn green", "2. Walk to the garden and stay there for 5-8 minutes (outdoor / semi-indoor)", "3. Stay inside the house 5-8 minutes (indoor)", "4. Stay under the eaves / patio for 5-8 minutes (semi-indoor)", "5. Walk to the community center / nearby church and stay there for 5-8 minutes (outdoor, indoor)","(optional) 6. Walk to a nearby gym and stay for 5-8 minutes (indoor)"] }    
+        ];
 
             const todoListContainer = document.getElementById("todoListContainer");
             const randomTodoListButton = document.getElementById("randomTodoListButton");
@@ -769,7 +769,7 @@ Email: chenxi.jiang@uzh.ch
                         nameConfirmButton.disabled = true;
 
                         setTimeout(()=>{
-                            alert("Then please have a look at your scenario!");
+                            alert("Now please select your scenario, and have a look at your tasks!");
                             showPage('page3');
                         },500)
 
@@ -884,7 +884,7 @@ Email: chenxi.jiang@uzh.ch
             todoListContainer.appendChild(todoList);
         }
 
-        randomTodoListButton.addEventListener("click", function() {
+/*        randomTodoListButton.addEventListener("click", function() {
             //console.log("Button clicked!");
             if (!random_buttonClicked) {
                 if (confirm("Are you sure you want to change the to do list? This action can only be performed once.")) {
@@ -894,6 +894,18 @@ Email: chenxi.jiang@uzh.ch
                 }
             } else {
                 alert("You have already changed the to do list. You cannot perform this action again.");
+            }
+        });*/
+
+        randomTodoListButton.addEventListener("click", function() {
+            let sceneIndex = prompt("Please enter the scenario number you want to select (1-8):\n1. Irchel Campus Scenario 1\n2. Irchel Campus Scenario 2\n3. City Center Scenario 1\n4. City Center Scenario 2\n5. Central Campus Scenario\n6. Central Scenario\n7. Tram 7 Scenario\n8. Single Family Scenario");
+            sceneIndex = parseInt(sceneIndex) - 1;
+            if (sceneIndex >= 0 && sceneIndex < todoLists.length) {
+                if (confirm(`Are you sure to change to "${todoLists[sceneIndex].title}"? Please follow the same scenario for each data collection :)`)) {
+                    renderTodoList(todoLists[sceneIndex].items.map(todo => ({ text: todo, completed: false })), todoLists[sceneIndex].title);
+                }
+            } else {
+                alert("Invalid scenario number. Please try again.");
             }
         });
 
@@ -1471,39 +1483,6 @@ Email: chenxi.jiang@uzh.ch
             link.click();
             document.body.removeChild(link);
         } 
-
-        /*function createCsvBlob() {
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
-            csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
-
-            var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
-            var end_time = JSON.parse(window.localStorage.getItem("endTimeKey")) ? JSON.parse(window.localStorage.getItem("endTimeKey")) : getEndTime();
-            var scenario_title = JSON.parse(window.localStorage.getItem("todosTitleKey")) ? JSON.parse(window.localStorage.getItem("todosTitleKey")) : null;
-            var todosText = JSON.parse(window.localStorage.getItem("todosKey")) ? JSON.parse(window.localStorage.getItem("todosKey")) : null;
-            todosText = todosText.map(todo => todo.text);
-            scenario_todos = todosText.join(", ");
-
-            buttonLogs.forEach(function(log) {
-                csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
-            });
-
-            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            return URL.createObjectURL(blob);
-        }
-
-        function exportLogs() {
-            if (!recordName) {
-                alert("Please enter your name before exporting!");
-                return;
-            }
-
-            const blobUrl = createCsvBlob();
-            gonative.share.downloadFile({url: blobUrl});
-        } */
-
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
             if (!recordName) {
