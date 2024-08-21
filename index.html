@@ -502,7 +502,7 @@
             <span id="exportText2">Export</span>
         </div>
         <h2>Log Table</h2>
-        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">You can edit your label records here, please check your recordsbefore exporting.
+        <div id="logpageNote" style="font-size: 16px;color: rgb(0, 0, 0);">- You can edit your label records here, please check your recordsbefore exporting. <br>- You can add note by DOUBLE clicking note cell.
         </div>
         <div id="buttonContainer">
             <button id="addRecordButton" onclick="toggleButton()">Add record</button>
@@ -580,7 +580,7 @@
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
-
+                //selectedButton = JSON.parse(window.localStorage.getItem("selectedbuttonKey")) ? JSON.parse(window.localStorage.getItem("selectedbuttonKey")) : selectedButton; 
                 var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : false;
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
@@ -679,6 +679,7 @@
                         localStorage.removeItem("clickKey");
                         localStorage.removeItem("freshmanKey");
                         localStorage.removeItem("startTimeKey");
+                        localStorage.removeItem("selectedbuttonKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -1139,7 +1140,7 @@ Email: chenxi.jiang@uzh.ch
                         }
                         renderLogs(); // Re-render the table to show the updated note and reset background
                     }, 50);
-                    
+
                 });
             });
 
@@ -1444,7 +1445,7 @@ Email: chenxi.jiang@uzh.ch
             }
             
             var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
+            //csvContent += `StartTime: ${startTime}, EndTime: ${endTime}\n`; 
             csvContent += "Name,ButtonId,ButtonLabel,Date,Time,TimeZone,Note\n"; // Add header row
 
             var start_time = JSON.parse(window.localStorage.getItem("startTimeKey")) ? JSON.parse(window.localStorage.getItem("startTimeKey")) : startTime;
@@ -1458,7 +1459,8 @@ Email: chenxi.jiang@uzh.ch
                 csvContent += `${log.name},${log.buttonId},${log.buttonLabel},${log.date},${log.time},${log.timeZone},${log.note}\n`;
             });
 
-            csvContent += `Start Time: ${start_time}, End Time: ${end_time}, Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
+            csvContent += `Start Time: ${start_time}, End Time: ${end_time}\n`;
+            csvContent += `Scenario Title: ${scenario_title}, Scenario Todos: ${scenario_todos}\n`;
             
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
@@ -1521,7 +1523,7 @@ Email: chenxi.jiang@uzh.ch
                 if (confirm("Do you want to stop the current label?")) {
                     logButtonClick(buttonId, "Stop");
                     selectedButton = null;
-                    currentStatus.textContent= "None";
+                    currentStatus.textContent= "You have no label, please choose one!";
                     statusImage.style.display = "none";
                     resetButtonStates();
                 }
