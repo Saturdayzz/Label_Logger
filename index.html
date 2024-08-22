@@ -628,7 +628,7 @@
                         button.style.backgroundColor = '#999999';
                         button.style.border = '4px solid #ccc';
                         button.disabled = true;
-                        document.getElementById('startTime').textContent = '';
+                        //document.getElementById('startTime').textContent = '';
                     }
                 }
                 var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
@@ -1238,15 +1238,17 @@ Email: chenxi.jiang@uzh.ch
         function toggleStartOrEndButton(){
             var button = document.getElementById('startOrEndButton');
             if (button.innerText === 'Start'){
-                alert("Data collection starts!")
-                button.innerText = 'End';
-                button.style.backgroundColor = '#999999';
-                button.style.border = '4px solid #ccc';
-                start_buttonClicked = 1;
-                saveClickToLocalStorage();
-                //var starttime = getCurrentTime()
-                getStartTime();
-                //console.log(startTime);
+                if (confirm("Data collection starts!")){
+                    button.innerText = 'End';
+                    button.style.backgroundColor = '#999999';
+                    button.style.border = '4px solid #ccc';
+                    start_buttonClicked = 1;
+                    saveClickToLocalStorage();
+                    //var starttime = getCurrentTime()
+                    getStartTime();
+                    //console.log(startTime);
+                }
+
             } else {
                 if (confirm("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")){
                     //button.innerText = 'Start';
@@ -1255,9 +1257,9 @@ Email: chenxi.jiang@uzh.ch
                     button.disabled = true;
                     start_buttonClicked = 2;
                     saveClickToLocalStorage();
-                    localStorage.removeItem("startTimeKey");
+                    //localStorage.removeItem("startTimeKey");
                     //startTime = null;
-                    document.getElementById('startTime').textContent = '';
+                    //document.getElementById('startTime').textContent = '';
                     getEndTime();
                     //console.log(endTime);
                 }
@@ -1516,6 +1518,10 @@ Email: chenxi.jiang@uzh.ch
         function exportLogs() {
             if (!recordName) {
                 alert("Please enter your name before exporting!");
+                return;
+            }
+            if (!endTime) {
+                alert("Please press 'End' to end data collection before exporting!");
                 return;
             }
             
