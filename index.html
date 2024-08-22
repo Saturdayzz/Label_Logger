@@ -560,6 +560,7 @@
             const todoListContainer = document.getElementById("todoListContainer");
             const randomTodoListButton = document.getElementById("randomTodoListButton");
             let random_buttonClicked = false;
+            let start_buttonClicked = null;
             let todoListIndex = null;
             let todoListTitle = null;
             let freshman = 0;
@@ -580,14 +581,56 @@
 
                 var storedLog = JSON.parse(window.localStorage.getItem("logKey")) ? JSON.parse(window.localStorage.getItem("logKey")) : buttonLogs;                
                 buttonLogs = storedLog;
-                //selectedButton = JSON.parse(window.localStorage.getItem("selectedbuttonKey")) ? JSON.parse(window.localStorage.getItem("selectedbuttonKey")) : selectedButton; 
+                selectedButton = JSON.parse(window.localStorage.getItem("selectedbuttonKey")) ? JSON.parse(window.localStorage.getItem("selectedbuttonKey")) : selectedButton; 
+                if(selectedButton) {
+                    id = selectedButton;
+                    if (id ==1){
+                        updateButtonStates();
+                        currentStatus.textContent = "You are " + "Indoor" + "!";
+                        statusImage.src = "images/indoor.png";
+                        statusImage.style.display = "block";;
+                    }
+                    else if (id ==2){
+                        updateButtonStates();
+                        currentStatus.textContent = "You are " + "Outdoor" + "!";
+                        statusImage.src = "images/outdoor.png";
+                        statusImage.style.display = "block";;
+                    }
+                    else if (id ==3){
+                        updateButtonStates();
+                        currentStatus.textContent = "You are " + "Semi-Indoor" + "!";
+                        statusImage.src = "images/semi_indoor.png";
+                        statusImage.style.display = "block";;
+                    }
+                    else if (id ==4){
+                        updateButtonStates();
+                        currentStatus.textContent = "You are " + "Not sure" + "!";
+                        statusImage.src = "images/not_sure.png";
+                        statusImage.style.display = "block";
+                    }
+                }
                 var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : false;
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                 var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
                 var storedTodoListIndex = JSON.parse(window.localStorage.getItem("todosIndexKey")) ? JSON.parse(window.localStorage.getItem("todosIndexKey")) : null;
                 todoListIndex = storedTodoListIndex;
-
+                start_buttonClicked = JSON.parse(window.localStorage.getItem("startButtonClickedKey")) ? JSON.parse(window.localStorage.getItem("startButtonClickedKey")) : start_buttonClicked;
+                if (start_buttonClicked){
+                    var button = document.getElementById('startOrEndButton');
+                    if(start_buttonClicked==1){
+                        button.innerText = 'End';
+                        button.style.backgroundColor = '#999999';
+                        button.style.border = '4px solid #ccc';
+                    }
+                    else if(start_buttonClicked==2){
+                        button.innerText = 'End';
+                        button.style.backgroundColor = '#999999';
+                        button.style.border = '4px solid #ccc';
+                        button.disabled = true;
+                        document.getElementById('startTime').textContent = '';
+                    }
+                }
                 var storedFreshman = JSON.parse(window.localStorage.getItem("freshmanKey")) ? JSON.parse(window.localStorage.getItem("freshmanKey")) : freshman;
                 freshman = storedFreshman;
                 //freshmanToLocalStorage();
@@ -657,6 +700,11 @@
                 window.localStorage.setItem("logKey", JSON.stringify(value));
             }
 
+            function saveSelectedButtonToLocalStorage() {
+                var value = selectedButton;
+                window.localStorage.setItem("selectedbuttonKey", JSON.stringify(value));
+            }
+
             function saveTodosToLocalStorage(todos, title, todoListIndex) {
                 window.localStorage.setItem("todosKey", JSON.stringify(todos));
                 //console.log(window.localStorage.getItem("todosKey"));
@@ -666,6 +714,10 @@
 
             function saveClickToLocalStorage() {
                 window.localStorage.setItem("clickKey", JSON.stringify(random_buttonClicked));
+            }
+
+            function saveClickToLocalStorage() {
+                window.localStorage.setItem("startButtonClickedKey", JSON.stringify(start_buttonClicked));
             }
 
             function restart(){
@@ -680,6 +732,7 @@
                         localStorage.removeItem("freshmanKey");
                         localStorage.removeItem("startTimeKey");
                         localStorage.removeItem("selectedbuttonKey");
+                        localStorage.removeItem("startButtonClickedKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -700,11 +753,11 @@ Thank you for participating in my research! **If you are new here, please read t
 
 My research aims to find an effective method for detecting indoor, outdoor, and semi-indoor activities using GPS and IMU data.
 
-"Label Logger" is a labeling APP for the "uTrail" device. The goal is to add environment labels when recording "uTrail" data. When data collection begins, you need to specify which kind of environment you are in and choose the corresponding label. Also, you need to change the label in time when changing the environment (e.g. from indoor to outdoor).
+"Label Logger" is a labeling APP for the "uTrail" device. The goal is to add environment labels when recording "uTrail" data. When data collection begins, you need to specify which kind of environment you are in and choose the corresponding label. Also, you need to **change the label as soon as possible** when changing the environment (e.g. from indoor to outdoor).
 
 In this research, I classify the environment to three different types (three environment labels), the definitions are as follows.
 
-**Indoor**: Activities conducted inside a building, enclosed space, or train in a tunnel.
+**Indoor**: Activities conducted inside a building, enclosed space and away from large windows or glass curtain wall.
 
 **Outdoor**: Activities conducted outside in the open air.
 
@@ -715,22 +768,26 @@ In this research, I classify the environment to three different types (three env
 ### Tutorial
 Here is a simple introduction. For a more detailed tutorial, please see the tutorial sheet.
 
---- **Here is important** ---
+--- **Below is important** ---
 
+- Before start, make sure uTrail is open, and then wear / take uTrail with its top exposed.
 - First, please enter your name (you don't have to use your real name) in "Home" page. Once confirmed, the name cannot be changed.
-- Next, go to the "Scenario" page, where you will see your scenario which is randomly selected. It will give you a general idea where to go and what to do.
-- Then, when you are ready, let's begin! Go back to the "Home" page, press the "Start" button and select your first environment label!
+- Next, go to the "Scenario" page, where you can select or create your scenario. It will give you a general idea where to go and what to do.
+- Then, when you are ready, let's begin! Go back to the "Home" page, press the "Start" button and select your first environment label.
 - During the data collection, you should wear the "uTrail" device at all times, follow the scenario tasks and change the environment label when changing environment.
-- When each data collection is complete, go to the "Log" page and click the "Export" button to get an Excel file of the log. Then, please send it as an attachment by email (chenxi.jiang@uzh.ch).
+- Possibly the log will not be stored correctly for unknown reason, so it is better to check log on 'Log' page from time to time.
+- When each data collection is complete, go to the "Log" page and click the "Export" button to get an Excel file of the log. 
+- Lastly please send it as an attachment by email (chenxi.jiang@uzh.ch).
+- Each scenario is one data collection. Please export log separately and press "Restart" on 'Home' page before each new data collection ;)
 
---- **Here is important** ---
+--- **Above is important** ---
 
 For more functions:
 - On the "Home" page, "clicking the same button" can stop the current record. You can also "Cancel" the record if it is incorrect. The "Restart" button clears all cache and data.
 - On the "Log" page, you can edit your log by adding or deleting a record. If you think the record is incorrect, please correct them!
 - On the "Scenario" page, you can change the scenario once or create your own scenario (please follow the design protocol).
 
-If you have any problem, do not hesitate to contact me! :)
+If you have any problem, do not hesitate to contact me!
 
 Enjoy your journey here!
 
@@ -783,7 +840,7 @@ Email: chenxi.jiang@uzh.ch
             function loadintialTodoList(){
                 storedIndex = JSON.parse(window.localStorage.getItem("todosIndexKey"));
                 todoListIndex = storedIndex? storedIndex:null;
-                console.log(todoListIndex);
+                //console.log(todoListIndex);
                 if(todoListIndex){
                     var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
                     var storedTodosTile = JSON.parse(window.localStorage.getItem("todosTitleKey"));
@@ -1116,7 +1173,7 @@ Email: chenxi.jiang@uzh.ch
 
         function setSortDateTime(date, time) {
             const [day, month, year] = date.split('/');
-            console.log(new Date(`${year}-${month}-${day}T${time}`));
+            //console.log(new Date(`${year}-${month}-${day}T${time}`));
             return new Date(`${year}-${month}-${day}T${time}`);
         }
 
@@ -1185,19 +1242,25 @@ Email: chenxi.jiang@uzh.ch
                 button.innerText = 'End';
                 button.style.backgroundColor = '#999999';
                 button.style.border = '4px solid #ccc';
+                start_buttonClicked = 1;
+                saveClickToLocalStorage();
                 //var starttime = getCurrentTime()
                 getStartTime();
-                console.log(startTime);
+                //console.log(startTime);
             } else {
-                alert("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")
-                button.innerText = 'Start';
-                button.style.backgroundColor = ''; 
-                button.style.border = '';
-                localStorage.removeItem("startTimeKey");
-                //startTime = null;
-                document.getElementById('startTime').textContent = '';
-                getEndTime();
-                console.log(endTime);
+                if (confirm("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")){
+                    //button.innerText = 'Start';
+                    //button.style.backgroundColor = ''; 
+                    //button.style.border = '';
+                    button.disabled = true;
+                    start_buttonClicked = 2;
+                    saveClickToLocalStorage();
+                    localStorage.removeItem("startTimeKey");
+                    //startTime = null;
+                    document.getElementById('startTime').textContent = '';
+                    getEndTime();
+                    //console.log(endTime);
+                }
             }
         }
 
@@ -1404,7 +1467,7 @@ Email: chenxi.jiang@uzh.ch
                                 listenRecordClick();
                             }else{
                                 this.classList.remove('selected-row');
-                                console.log(raw_classlist)
+                                //console.log(raw_classlist)
                                 this.classList.add(raw_classlist);
                             }
                         }, 150);
@@ -1477,12 +1540,23 @@ Email: chenxi.jiang@uzh.ch
             var encodedUri = encodeURI(csvContent);
             var link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "label_logs.csv");
+            link.setAttribute("download", `label_logs_${recordName}_${convertStartTimeFormat(startTime)}.csv`);
             document.body.appendChild(link);
 
             link.click();
             document.body.removeChild(link);
         } 
+
+        function convertStartTimeFormat(startTime) {
+            var dateTimeParts = startTime.split(' '); // ["06/11/2022", "18:56:00", "GMT+0000"]
+
+            var dateParts = dateTimeParts[0].split('/'); // ["06", "11", "2022"]
+            var timeParts = dateTimeParts[1].split(':'); // ["18", "56", "00"]
+
+            var formattedDateTime = dateParts[2] + '_' + dateParts[1] + '_' + dateParts[0] + '_' + timeParts[0] + '_' + timeParts[1];
+
+            return formattedDateTime;
+        }
 
         function handleButtonClick(buttonId, buttonLabel, imageName) {
             if (!recordName) {
@@ -1502,6 +1576,7 @@ Email: chenxi.jiang@uzh.ch
                 if (confirm("Do you want to stop the current label?")) {
                     logButtonClick(buttonId, "Stop");
                     selectedButton = null;
+                    saveSelectedButtonToLocalStorage();
                     currentStatus.textContent= "You have no label, please choose one!";
                     statusImage.style.display = "none";
                     resetButtonStates();
@@ -1551,6 +1626,7 @@ Email: chenxi.jiang@uzh.ch
                 if (confirm("Are you sure you want to select this option?")) {
                     var note = prompt("Please enter your note:") || "No note";
                     selectedButton = buttonId;
+                    saveSelectedButtonToLocalStorage();
                     logButtonClick(buttonId, note);
                     updateButtonStates();
                     currentStatus.textContent = "You are " + buttonLabel + "!";
@@ -1559,6 +1635,7 @@ Email: chenxi.jiang@uzh.ch
                 }
             } else {
                 selectedButton = buttonId;
+                saveSelectedButtonToLocalStorage();
                 logButtonClick(buttonId, "");
                 updateButtonStates();
                 currentStatus.textContent = "You are " + buttonLabel + "!";
@@ -1614,6 +1691,7 @@ Email: chenxi.jiang@uzh.ch
                     deleteRow(buttonLogs.length - 1);
                     //logButtonClick(selectedButton, "Cancel");
                     selectedButton = null;
+                    saveSelectedButtonToLocalStorage();
                     currentStatus.textContent = "None";
                     statusImage.style.display = "none";
                     resetButtonStates();}
