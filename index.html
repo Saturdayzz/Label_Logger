@@ -1513,6 +1513,7 @@ Email: chenxi.jiang@uzh.ch
             var time = getCurrentTime();
             var buttonLabel = buttonLabels[buttonId] || "unknown";
             buttonLogs.push({ buttonId: buttonId, buttonLabel: buttonLabel, date: time.date, time: time.time, timeZone:time.timeZone, name: recordName, note: note, isNewRecord: false });
+            renderLogs();
         }
 
         function exportLogs() {
