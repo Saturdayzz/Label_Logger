@@ -609,6 +609,8 @@
                         statusImage.style.display = "block";
                     }
                 }
+                endTime = JSON.parse(window.localStorage.getItem("endTimeKey")) ? JSON.parse(window.localStorage.getItem("endTimeKey")) : endTime;
+                //console.log(endTime);
                 var storedRandomButtonClicked = JSON.parse(window.localStorage.getItem("clickKey")) ? JSON.parse(window.localStorage.getItem("clickKey")) : false;
                 random_buttonClicked = storedRandomButtonClicked;
                 var storedTodos = JSON.parse(window.localStorage.getItem("todosKey"));
@@ -627,7 +629,7 @@
                         button.innerText = 'End';
                         button.style.backgroundColor = '#999999';
                         button.style.border = '4px solid #ccc';
-                        button.disabled = true;
+                        //button.disabled = true;
                         //document.getElementById('startTime').textContent = '';
                     }
                 }
@@ -733,6 +735,7 @@
                         localStorage.removeItem("startTimeKey");
                         localStorage.removeItem("selectedbuttonKey");
                         localStorage.removeItem("startButtonClickedKey");
+                        localStorage.removeItem("endTimeKey");
                         
                         setTimeout(()=>{
                             alert("You can restart after re-open 'Label Logger'!");
@@ -1250,11 +1253,14 @@ Email: chenxi.jiang@uzh.ch
                 }
 
             } else {
-                if (confirm("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")){
+                if (start_buttonClicked == 2) {
+                    alert("This data collection finished! To start a new one, please press 'Restart'.");
+                }
+                else if (confirm("Data collection ends! Please go to the 'Log' page and export your log. If you want to start a new data collection, please export the current log first and press 'Restart'.")){
                     //button.innerText = 'Start';
                     //button.style.backgroundColor = ''; 
                     //button.style.border = '';
-                    button.disabled = true;
+                    //button.disabled = true;
                     start_buttonClicked = 2;
                     saveClickToLocalStorage();
                     //localStorage.removeItem("startTimeKey");
@@ -1264,6 +1270,7 @@ Email: chenxi.jiang@uzh.ch
                     //console.log(endTime);
                 }
             }
+
         }
 
         function toggleButton_delete() {
