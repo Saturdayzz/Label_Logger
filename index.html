@@ -958,7 +958,7 @@ Email: chenxi.jiang@uzh.ch
         });*/
 
         randomTodoListButton.addEventListener("click", function() {
-            let sceneIndex = prompt("Please enter the scenario number you want to select (1-8):\n1. Irchel Campus Scenario 1\n2. Irchel Campus Scenario 2\n3. City Center Scenario 1\n4. City Center Scenario 2\n5. Central Campus Scenario\n6. Central Scenario\n7. Tram 7 Scenario\n8. Single Family Scenario");
+            let sceneIndex = prompt("Please enter the scenario number you want to select (1-8):\n1. Irchel Campus Scenario 1\n2. Irchel Campus Scenario 2\n3. City Center Scenario 1\n4. City Center Scenario 2\n5. Central Campus Scenario\n6. Train Station Scenario\n7. Tram 7 Scenario\n8. Single Family Scenario");
             sceneIndex = parseInt(sceneIndex) - 1;
             if (sceneIndex >= 0 && sceneIndex < todoLists.length) {
                 if (confirm(`Are you sure to change to "${todoLists[sceneIndex].title}"? Please follow the same scenario for each data collection :)`)) {
